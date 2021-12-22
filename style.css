@@ -1,0 +1,9 @@
+body{
+font-family: "Source Sans Pro","Roboto", "Helvetica", "Roboto";
+}
+.profile-user-img {
+	border: 3px solid #adb5bd;
+	margin: 0 auto;
+	padding: 3px;
+	width: 100px;
+}
