@@ -38,13 +38,9 @@ console.log("db\n", db);
 // Get Firebase App for storage
 const firebaseApp = getApp();
 console.log("firebaseApp\n", firebaseApp);
-// Get a non-default bucket from a custom firebase.app.App
-const storage2 = getStorage(firebaseApp, "gs://school-app-d68b8.appspot.com");
-console.log("storage2\n", storage2);
 
 const storage = getStorage();
 const storageRef = ref(storage, 'school-app');
-console.log("storageRef\n", storageRef);
 
 //**************Uploaded a blob or file */
 // 'file' comes from the Blob or File API
@@ -57,23 +53,65 @@ console.log("storageRef\n", storageRef);
 //   console.log('Uploaded a raw string!');
 // });
 
-//=================================================================
-//=================================================================
+//*=================================================================
+//*=================================================================
+
    /********************************/
-   /*Get the whole task by default from the databases */
+   //*Get the whole students from the databases */
    /********************************/
    const getStudents = async (db) => {
-      const tasksCollection = collection(db, 'students');
-      const taskSnapshot = await getDocs(tasksCollection);
-      let students = taskSnapshot.docs.map(doc => {
-         return {
-            "data": doc.data(),
-            "id": doc.id
-         }
-      });
-      return students
+      try {
+         const studentsCollection = collection(db, 'students');
+         const studentSnapshot = await getDocs(studentsCollection);
+
+         let students = studentSnapshot.docs.map(doc => {
+            return {
+               "data": doc.data(),
+               "id": doc.id
+            }
+         });
+
+         return students
+      } catch (error) {
+         console.log("Error  student👇👇\n");
+         console.log(error);
+      }
    }
    getStudents(db).then(students => {
       //Display All the students
       console.log(students);
    });
+
+   
+   /********************************/
+   //*Update a students in databases */
+   /********************************/
+   const updateStudent = async function (id, studentUpdated) {
+      try {
+         const student = await getDoc(doc(db, "students", id))
+
+         await updateDoc(doc(db, "students", id), {
+            ...studentUpdated
+         })
+      } catch (e) {
+         alert("Error Updating student👉👉\n");
+         console.log("Error Updating student👇👇\n",e);
+      }
+
+   }
+   const studentUpdated = {
+      "first_name": "Mouhamet",
+      "skills": [
+         "{\"frontend\":80}",
+         "{\"backend\":70}",
+         "{\"API\":70}"
+      ],
+      "level": "intermediaire",
+      "bio": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quo eum ea exercitationem ex. Eaque at eum saepe? Odit, sunt.",
+      "created_at": {
+         "seconds": 1640262000,
+         "nanoseconds": 0
+      },
+      "last_name": "Dieye"
+      }
+   // updateStudent("RNteYV3uOo44cTUARnTK", studentUpdated);
