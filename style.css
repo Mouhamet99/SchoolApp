@@ -17,13 +17,17 @@ font-family: "Source Sans Pro","Roboto", "Helvetica", "Roboto";
 }
 .waiting-stduents-card.card:hover {
     transition: 0.5s;
-    -webkit-box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, .175) !important;
-    -moz-box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, .175) !important;
-    box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, .175) !important;
+    -webkit-box-shadow:0 .1rem .4rem rgba(0,0,0,.15) !important;;
+    -moz-box-shadow:0 .1rem .4rem rgba(0,0,0,.15) !important;;
+    box-shadow:0 .1rem .4rem rgba(0,0,0,.15) !important;;
     /* border: 2px solid #ce0033; */
  }
  .fs-x-small{
      font-size: x-small;
+ }
+ .d-inline{
+     background-color: #6c757d61;
+     background-color: #6c757d26;
  }
 
      
