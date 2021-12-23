@@ -12,8 +12,12 @@ font-family: "Source Sans Pro","Roboto", "Helvetica", "Roboto";
     height: 70px;
 }
 .sp-mh-70{
-    max-height: 70vh;
-    overflow-y: scroll;
+}
+@media screen and (max-width: 1200px) {
+    .sp-mh-70{
+        max-height: 70vh;
+        overflow-y: scroll;
+    }
 }
 .waiting-stduents-card.card:hover {
     transition: 0.5s;
