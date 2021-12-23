@@ -57,7 +57,7 @@ const storageRef = ref(storage, 'school-app');
 //*=================================================================
 
    /********************************/
-   //*Get the whole students from the databases */
+   //Get the whole students from the databases/
    /********************************/
    const getStudents = async (db) => {
       try {
@@ -84,7 +84,7 @@ const storageRef = ref(storage, 'school-app');
 
    
    /********************************/
-   //*Update a students in databases */
+   //Update a students in databases /
    /********************************/
    const updateStudent = async function (id, studentUpdated) {
       try {
@@ -99,19 +99,49 @@ const storageRef = ref(storage, 'school-app');
       }
 
    }
-   const studentUpdated = {
-      "first_name": "Mouhamet",
+   const student = {
+      "first_name": "Maman",
       "skills": [
-         "{\"frontend\":80}",
-         "{\"backend\":70}",
-         "{\"API\":70}"
+         "{\"frontend\":50}",
+         "{\"backend\":80}",
+         "{\"API\":80}"
       ],
-      "level": "intermediaire",
+      "level": "debutant",
       "bio": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quo eum ea exercitationem ex. Eaque at eum saepe? Odit, sunt.",
       "created_at": {
          "seconds": 1640262000,
          "nanoseconds": 0
       },
-      "last_name": "Dieye"
+      "last_name": "DIOP"
       }
-   // updateStudent("RNteYV3uOo44cTUARnTK", studentUpdated);
+   // updateStudent("RNteYV3uOo44cTUARnTK", student);
+
+   /********************************/
+   /*Remove a student from firestore database */
+   /********************************/
+
+   async function removeStudent(id) {
+      try {
+         await deleteDoc(doc(db, "students", id)).then(() =>alert('Student Removed Successfully😎😎👍👍'));
+      } catch (e) {
+         console.error("Error Deleting student: ", e);
+         alert("Error Deleting student🤦‍♂️🤷‍♀️🤷‍♀️");
+      }
+   }
+   removeStudent("vcSLdIpa92Wf2kZbRNvF")
+
+   /********************************/
+   /*Insert a student from firestore database */
+   /********************************/
+   async function addStudent(newStudent) {
+      try {
+         const studentRef = await addDoc(collection(db, "students"), {
+            ...newStudent
+         });
+         const studentObj = await getDoc(doc(db, "students", studentRef.id)).then(() =>alert('Student Added Successfully😎😎👍👍'))
+      } catch (e) {
+         console.error("Error adding student: ", e);
+      }
+   }
+   // addStudent(student)
+
