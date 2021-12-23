@@ -33,11 +33,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-console.log("db\n", db);
 
 // Get Firebase App for storage
 const firebaseApp = getApp();
-console.log("firebaseApp\n", firebaseApp);
 
 const storage = getStorage();
 const storageRef = ref(storage, 'school-app');
@@ -97,8 +95,11 @@ const storageRef = ref(storage, 'school-app');
          alert("Error Updating student👉👉\n");
          console.log("Error Updating student👇👇\n",e);
       }
-
    }
+   // "created_at": {
+   //    "seconds": 1640262000,
+   //    "nanoseconds": 0
+   // },
    const student = {
       "first_name": "Maman",
       "skills": [
@@ -108,13 +109,10 @@ const storageRef = ref(storage, 'school-app');
       ],
       "level": "debutant",
       "bio": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quo eum ea exercitationem ex. Eaque at eum saepe? Odit, sunt.",
-      "created_at": {
-         "seconds": 1640262000,
-         "nanoseconds": 0
-      },
-      "last_name": "DIOP"
+      "last_name": "DIOP",
+      "created_at":  Timestamp.fromDate(new Date())
       }
-   // updateStudent("RNteYV3uOo44cTUARnTK", student);
+   //updateStudent("RNteYV3uOo44cTUARnTK", student);
 
    /********************************/
    /*Remove a student from firestore database */
@@ -128,7 +126,7 @@ const storageRef = ref(storage, 'school-app');
          alert("Error Deleting student🤦‍♂️🤷‍♀️🤷‍♀️");
       }
    }
-   removeStudent("vcSLdIpa92Wf2kZbRNvF")
+   //removeStudent("vcSLdIpa92Wf2kZbRNvF")
 
    /********************************/
    /*Insert a student from firestore database */
