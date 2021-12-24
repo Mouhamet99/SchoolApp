@@ -1,3 +1,4 @@
+import { uploadFiles } from './api.js'
 window.onload = function () {
     // const studentRef = {
     //     data: {
@@ -25,7 +26,7 @@ window.onload = function () {
 
 
     const displayWaitingCards = () => {
-        STUDENTS.forEach((student, index)=> {
+        STUDENTS.forEach((student, index) => {
             console.log(student);
             addCard(student, index)
         });
@@ -35,15 +36,19 @@ window.onload = function () {
         sessionStorage.setItem("students", JSON.stringify(STUDENTS));
         console.log(sessionStorage.getItem("students"));
     }
+
     const onSubmitForm = (e) => {
         e.preventDefault();
-
+        let file = document.getElementById('profile-img')
+        uploadFiles(file.files[0])
         const student = {}
 
         student.first_name = firstName.value
         student.last_name = lastName.value
         student.bio = bio.value
         student.level = level.value
+
+        // let url = window.URL.createObjectURL(file.files[0])
         // student.created_at = Timestamp.fromDate(new Date())
         // student.skills =  ['{"frontend":50}', '{"backend":90}', '{"Desingn":30}']
         AddTosessionStorage({ data: student, id: Math.random().toString() })
@@ -56,7 +61,7 @@ window.onload = function () {
 
     }
     const removeStudent = (id, index) => {
-        STUDENTS.splice(index,1)
+        STUDENTS.splice(index, 1)
         sessionStorage.setItem('students', JSON.stringify(STUDENTS))
         let currentCard = document.getElementById(`${id}`)
         currentCard.remove()
@@ -135,5 +140,8 @@ window.onload = function () {
 
         addForm.reset()
     })
+
+
+
 
 };
