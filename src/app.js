@@ -1,4 +1,4 @@
-import { uploadFiles } from './api.js'
+import { uploadFiles, addStudent } from './api.js'
 window.onload = function () {
     // const studentRef = {
     //     data: {
@@ -17,18 +17,23 @@ window.onload = function () {
     const STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
 
     const addForm = document.getElementById('add-form')
+    const submitButton = document.querySelector('button[type="submit"]')
+    const btnFormEdit = document.getElementById('save-edit')
     const lastName = document.getElementById('last-name')
     const firstName = document.getElementById('first-name')
     const bio = document.getElementById('bio')
     const level = document.getElementById('level')
+    const file = document.getElementById('profile-img')
+
     const btnFormSubmit = document.getElementById('btn-submit')
+    const saveStudentsButton = document.querySelector('#saveStudents')
     const cardContainer = document.querySelector('#waiting-student-cards')
 
 
     const displayWaitingCards = () => {
         STUDENTS.forEach((student, index) => {
             console.log(student);
-            addCard(student , index)
+            addCard(student, index)
         });
     }
     const AddTosessionStorage = (student) => {
@@ -39,17 +44,17 @@ window.onload = function () {
 
     const onSubmitForm = (e) => {
         e.preventDefault();
-        let file = document.getElementById('profile-img')
-        // let downloadURL = uploadFiles(file.files[0]);
-        // console.log("downloadURL", downloadURL);
+        let url = window.URL.createObjectURL(file.files[0])
         const student = {}
-
+        
         student.first_name = firstName.value
         student.last_name = lastName.value
         student.bio = bio.value
         student.level = level.value
+        student.image = file.files[0]
+        student.url = url
 
-        // let url = window.URL.createObjectURL(file.files[0])
+
         // student.created_at = Timestamp.fromDate(new Date())
         // student.skills =  ['{"frontend":50}', '{"backend":90}', '{"Desingn":30}']
         AddTosessionStorage({ data: student, id: Math.random().toString() })
@@ -57,7 +62,6 @@ window.onload = function () {
 
         addForm.reset()
     }
-
     const UpdatedCard = (oldstudent, newstudent) => {
 
     }
@@ -68,13 +72,13 @@ window.onload = function () {
         currentCard.remove()
     }
     const addCard = (student, index) => {
-        const saveButton = document.querySelector('#saveStudents')
+
         const card = `
         <div class="card p-3 my-2 waiting-student-card" id="${student.id}">
                     <div class="row">
                         <div class="d-flex flex-row align-items-center">
                             <!-- <div class="icon"> <i class="fa fa-twitter"></i> </div> -->
-                            <div class="icon"> <img class="rounded-circle img-fluid"src="https://via.placeholder.com/100" alt="student profile image" > </div>
+                            <div class="icon"> <img class="rounded-circle img-fluid" src="${student['data'].url}" alt="student profile image" width="100" height="100"> </div>
                             <div class="ms-2 c-details">
                                 <h6 class="mb-0" id="student-fullname" data-last-name="${student['data'].last_name}" data-first-name="${student['data'].first_name}" > ${student['data'].first_name} ${student['data'].last_name}</h6> 
                                 <strong id="student-level">${student['data'].level}</strong>
@@ -97,7 +101,7 @@ window.onload = function () {
                 </div>
         `;
 
-        saveButton.insertAdjacentHTML('beforebegin', card)
+        saveStudentsButton.insertAdjacentHTML('beforebegin', card)
 
         document.getElementById(`edit-student-${student.id}`).addEventListener('click', () => {
 
@@ -105,6 +109,7 @@ window.onload = function () {
             firstName.value = student["data"].first_name
             bio.value = student["data"].bio
             level.value = student["data"].level
+            file.files[0] = {...student["data"].image}
             // levelOption.selected = true
 
             btnFormSubmit.classList.add('d-none')
@@ -117,8 +122,6 @@ window.onload = function () {
     }
 
     displayWaitingCards()
-    const submitButton = document.querySelector('button[type="submit"]')
-    const btnFormEdit = document.getElementById('save-edit')
 
     submitButton.addEventListener('click', onSubmitForm)
 
@@ -138,10 +141,10 @@ window.onload = function () {
         student.last_name = lastName.value
         student.bio = bio.value
         student.level = level.value
-        
+
         ClONE_STUDENTS.forEach((clone_student, i) => {
             if (clone_student.id === id) {
-                STUDENTS.splice(i, 1, {data: student, id :id})
+                STUDENTS.splice(i, 1, { data: student, id: id })
             }
         })
         sessionStorage.setItem('students', JSON.stringify(STUDENTS))
@@ -150,9 +153,18 @@ window.onload = function () {
         btnFormEdit.classList.add('d-none')
         btnFormEdit.setAttribute('data-card-to-update', "")
         // AddTosessionStorage({ data: student, id: Math.random().toString() })
-        
+
         addForm.reset()
     })
+    saveStudentsButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        STUDENTS.forEach(newStudent => {
+            addStudent(newStudent)
+        })
+        sessionStorage.removeItem('students')
+    })
+
+
 
 
 

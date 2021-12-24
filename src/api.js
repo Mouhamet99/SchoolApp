@@ -125,12 +125,25 @@ async function removeStudent(id) {
 /********************************/
 /*Insert a student from firestore database */
 /********************************/
-async function addStudent(newStudent) {
+export async function addStudent(newStudent) {
    try {
-      const studentRef = await addDoc(collection(db, "students"), {
-         ...newStudent
-      });
-      const studentObj = await getDoc(doc(db, "students", studentRef.id)).then(() => alert('Student Added Successfully😎😎👍👍'))
+      uploadFiles(newStudent['data'].image).then(urldata => {
+         console.log(urldata);
+         newStudent['data']['image'] = { name: newStudent['data']['image'].name, url: urldata }
+         delete newStudent['data'].url
+      }).then(()=>{
+         console.log(newStudent['data']);
+         const studentRef = addDoc(collection(db, "students"), {
+            ...newStudent['data'],
+            "created_at": Timestamp.fromDate(new Date()),
+            "skills": [
+               "{\"frontend\":50}",
+               "{\"backend\":80}",
+               "{\"API\":80}"
+            ]
+         });
+         // const studentObj = getDoc(doc(db, "students", studentRef.id)).then(() => alert('Student Added Successfully😎😎👍👍'))
+      })
    } catch (e) {
       console.error("Error adding student: ", e);
    }
@@ -141,20 +154,15 @@ async function addStudent(newStudent) {
 /*Uppload file */
 /********************************/
 
-export const uploadFiles = (file) => {
+export const uploadFiles = async (file) => {
    //
    if (!file) return;
    const storage = getStorage();
    // let url = window.URL.createObjectURL(file.files[0])
-   const storageRef = ref(storage, `files/${file.name}.png`);
-   const uploadImage = uploadBytes(storageRef, file)
+   const storageRef = ref(storage, `userProfiles/${file.name}.png`);
    let downloadURL = ""
-   uploadImage.then((snapshot) => {
-      console.log('Uploaded image file successfully!');
-      getDownloadURL(snapshot.ref).then(URL=> {
-         console.log('ca passe');
-         downloadURL = URL
-      });
+   await uploadBytes(storageRef, file).then((snapshot) => getDownloadURL(snapshot.ref)).then(URL => {
+      downloadURL = URL
    });
    return downloadURL
 };
