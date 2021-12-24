@@ -71,7 +71,7 @@ const getStudents = async (db) => {
 }
 getStudents(db).then(students => {
    //Display All the students
-   console.log(students);
+   // console.log(students);
 });
 
 
@@ -148,11 +148,13 @@ export const uploadFiles = (file) => {
    // let url = window.URL.createObjectURL(file.files[0])
    const storageRef = ref(storage, `files/${file.name}.png`);
    const uploadImage = uploadBytes(storageRef, file)
+   let downloadURL = ""
    uploadImage.then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-      getDownloadURL(snapshot.ref).then((downloadURL) => {
-         console.log("File available at", downloadURL);
+      console.log('Uploaded image file successfully!');
+      getDownloadURL(snapshot.ref).then(URL=> {
+         console.log('ca passe');
+         downloadURL = URL
       });
-      
    });
+   return downloadURL
 };

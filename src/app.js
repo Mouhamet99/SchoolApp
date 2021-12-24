@@ -28,7 +28,7 @@ window.onload = function () {
     const displayWaitingCards = () => {
         STUDENTS.forEach((student, index) => {
             console.log(student);
-            addCard(student, index)
+            addCard(student , index)
         });
     }
     const AddTosessionStorage = (student) => {
@@ -40,7 +40,8 @@ window.onload = function () {
     const onSubmitForm = (e) => {
         e.preventDefault();
         let file = document.getElementById('profile-img')
-        uploadFiles(file.files[0])
+        // let downloadURL = uploadFiles(file.files[0]);
+        // console.log("downloadURL", downloadURL);
         const student = {}
 
         student.first_name = firstName.value
@@ -75,7 +76,7 @@ window.onload = function () {
                             <!-- <div class="icon"> <i class="fa fa-twitter"></i> </div> -->
                             <div class="icon"> <img class="rounded-circle img-fluid"src="https://via.placeholder.com/100" alt="student profile image" > </div>
                             <div class="ms-2 c-details">
-                                <h6 class="mb-0" id="student-fullname" data-laste-name="${student['data'].laste_name}" data-first-name="${student['data'].first_name}" >${student['data'].first_name} ${student['data'].last_name}</h6> 
+                                <h6 class="mb-0" id="student-fullname" data-last-name="${student['data'].last_name}" data-first-name="${student['data'].first_name}" > ${student['data'].first_name} ${student['data'].last_name}</h6> 
                                 <strong id="student-level">${student['data'].level}</strong>
                             </div>
                             <div class="d-inline ms-auto align-self-start">
@@ -126,6 +127,7 @@ window.onload = function () {
 
         let id = e.target.dataset.cardToUpdate
         let currentCard = document.getElementById(`${id}`)
+        let ClONE_STUDENTS = [...STUDENTS]
         const student = {}
 
         currentCard.querySelector('#student-fullname').innerHTML = firstName.value + "  " + lastName.value
@@ -136,8 +138,19 @@ window.onload = function () {
         student.last_name = lastName.value
         student.bio = bio.value
         student.level = level.value
-        // AddTosessionStorage({ data: student, id: Math.random().toString() })
+        
+        ClONE_STUDENTS.forEach((clone_student, i) => {
+            if (clone_student.id === id) {
+                STUDENTS.splice(i, 1, {data: student, id :id})
+            }
+        })
+        sessionStorage.setItem('students', JSON.stringify(STUDENTS))
 
+        btnFormSubmit.classList.remove('d-none')
+        btnFormEdit.classList.add('d-none')
+        btnFormEdit.setAttribute('data-card-to-update', "")
+        // AddTosessionStorage({ data: student, id: Math.random().toString() })
+        
         addForm.reset()
     })
 
