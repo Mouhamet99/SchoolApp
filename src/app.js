@@ -1,4 +1,4 @@
-import { uploadFiles, addStudent } from './api.js'
+import { uploadFiles, addStudent, getStudents } from './api.js'
 window.onload = function () {
     // const studentRef = {
     //     data: {
@@ -31,6 +31,7 @@ window.onload = function () {
 
 
     const displayWaitingCards = () => {
+    
         STUDENTS.forEach((student, index) => {
             console.log(student);
             addCard(student, index)
@@ -46,7 +47,7 @@ window.onload = function () {
         e.preventDefault();
         let url = window.URL.createObjectURL(file.files[0])
         const student = {}
-        
+
         student.first_name = firstName.value
         student.last_name = lastName.value
         student.bio = bio.value
@@ -109,7 +110,7 @@ window.onload = function () {
             firstName.value = student["data"].first_name
             bio.value = student["data"].bio
             level.value = student["data"].level
-            file.files[0] = {...student["data"].image}
+            file.files[0] = { ...student["data"].image }
             // levelOption.selected = true
 
             btnFormSubmit.classList.add('d-none')
@@ -160,8 +161,10 @@ window.onload = function () {
         e.preventDefault()
         STUDENTS.forEach(newStudent => {
             addStudent(newStudent)
+            
         })
         sessionStorage.removeItem('students')
+
     })
 
 

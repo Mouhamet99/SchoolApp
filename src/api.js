@@ -51,7 +51,7 @@ const db = getFirestore(app);
 /********************************/
 //Get the whole students from the databases/
 /********************************/
-const getStudents = async (db) => {
+export const getStudents = async () => {
    try {
       const studentsCollection = collection(db, 'students');
       const studentSnapshot = await getDocs(studentsCollection);
@@ -69,10 +69,7 @@ const getStudents = async (db) => {
       console.log(error);
    }
 }
-getStudents(db).then(students => {
-   //Display All the students
-   // console.log(students);
-});
+
 
 
 /********************************/
@@ -125,7 +122,7 @@ async function removeStudent(id) {
 /********************************/
 /*Insert a student from firestore database */
 /********************************/
-export async function addStudent(newStudent) {
+export function addStudent(newStudent) {
    try {
       uploadFiles(newStudent['data'].image).then(urldata => {
          console.log(urldata);
