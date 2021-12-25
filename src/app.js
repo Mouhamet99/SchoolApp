@@ -31,7 +31,7 @@ window.onload = function () {
 
 
     const displayWaitingCards = () => {
-    
+
         STUDENTS.forEach((student, index) => {
             console.log(student);
             addCard(student, index)
@@ -73,13 +73,14 @@ window.onload = function () {
         currentCard.remove()
     }
     const addCard = (student, index) => {
-
         const card = `
         <div class="card p-3 my-2 waiting-student-card" id="${student.id}">
                     <div class="row">
                         <div class="d-flex flex-row align-items-center">
                             <!-- <div class="icon"> <i class="fa fa-twitter"></i> </div> -->
-                            <div class="icon"> <img class="rounded-circle img-fluid" src="${student['data'].url}" alt="student profile image" width="100" height="100"> </div>
+                            <div class="icon  border border-4 border-secondary rounded-circle shadow-sm d-flex">
+                             <img class="rounded-circle img-fluid sp-img-cover" src="${student['data'].url}" alt="student profile image"> 
+                             </div>
                             <div class="ms-2 c-details">
                                 <h6 class="mb-0" id="student-fullname" data-last-name="${student['data'].last_name}" data-first-name="${student['data'].first_name}" > ${student['data'].first_name} ${student['data'].last_name}</h6> 
                                 <strong id="student-level">${student['data'].level}</strong>
@@ -161,7 +162,7 @@ window.onload = function () {
         e.preventDefault()
         STUDENTS.forEach(newStudent => {
             addStudent(newStudent)
-            
+
         })
         sessionStorage.removeItem('students')
 

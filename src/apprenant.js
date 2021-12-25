@@ -13,7 +13,8 @@ window.onload = function () {
                      
                      <div class="icon border border-4 border-secondary rounded-circle shadow-sm d-flex"> 
                      <img class="rounded-circle img-fluid sp-img-cover"
-                           src="${student['data']['image']['url']}" alt="student profile image"> </div>
+                           src="${student['data']['image']['url']}" alt="student profile image">
+                            </div>
                      <div class="ms-2 c-details">
                         <h6 class="mb-0" data-last-name="${student['data'].last_name}" data-first-name="${student['data'].first_name}" >${student['data'].first_name} ${student['data'].last_name}</h6>
                         <strong class="lead fs-6">Debutant</strong>

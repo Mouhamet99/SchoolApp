@@ -18,6 +18,25 @@
 </head>
 
 <body>
+    <header class="">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" href="#">SCHOOL APP</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link active" aria-current="page" href="./index.html">Accueil</a>
+                        <a class="nav-link" href="./detail.html">Detail</a>
+                        <a class="nav-link" href="#">Listes des apprenants</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
     <div class="row mx-auto justify-content-around">
         <div class="col-md-4  mt-4">
             <!-- general form elements -->
@@ -63,21 +82,22 @@
                                 <option value="avance">Avancé</option>
                             </select>
                         </div>
+                        <div class="">
+                            <button type="submit" class="btn btn-danger float-end " Id="btn-submit">Ajouter</button>
+                            <button type="submit" class="btn btn-warning float-end d-none"
+                                id="save-edit">Modifier</button>
+                            <br clear="both">
+                        </div>
                     </div>
                     <!-- /.card-body -->
 
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-danger float-end " Id="btn-submit">Ajouter</button>
-                        <button type="submit" class="btn btn-warning float-end d-none" id="save-edit">Modifier</button>
-                        <br clear="both">
-                    </div>
                 </form>
             </div>
             <!-- /.card -->
 
         </div>
         <div class="col-md-8 col-lg-6 px-5 mt-4 sp-mh-70" id="waiting-student-cards">
-                <!-- <div class="card p-3 my-2 waiting-student-card" >
+            <!-- <div class="card p-3 my-2 waiting-student-card" >
                     <div class="row">
                         <div class="d-flex flex-row align-items-center">
                             <div class="icon"> <img class="rounded-circle img-fluid"src="https://via.placeholder.com/100" alt="student profile image" > </div>
@@ -104,7 +124,7 @@
                         </div>
                     </div>
                 </div> -->
-                <button type="button" class="btn btn-secondary float-end" id="saveStudents">Sauvegarder</button>
+            <button type="button" class="btn btn-secondary float-end" id="saveStudents">Sauvegarder</button>
         </div>
     </div>
     <!-- Optional JavaScript; choose one of the two! -->
