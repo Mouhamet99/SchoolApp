@@ -11,8 +11,8 @@ window.onload = function () {
                <div class="row">
                   <div class="d-flex flex-row align-items-center" >
                      
-                     <div class="icon border border-4 border-secondary rounded-circle d-flex"> 
-                     <img class="rounded-circle img-fluid"
+                     <div class="icon border border-4 border-secondary rounded-circle shadow-sm d-flex"> 
+                     <img class="rounded-circle img-fluid sp-img-cover"
                            src="${student['data']['image']['url']}" alt="student profile image"> </div>
                      <div class="ms-2 c-details">
                         <h6 class="mb-0" data-last-name="${student['data'].last_name}" data-first-name="${student['data'].first_name}" >${student['data'].first_name} ${student['data'].last_name}</h6>
@@ -25,7 +25,7 @@ window.onload = function () {
                </div>
                <div class="row">
                   <div class="mt-3">
-                     <strong class="d-block lead ">Biographie</strong>
+                     <strong class="d-block fw-normal text-uppercase text-decoration-underline">Biographie:</strong>
                      <span class="text-muted">${student['data'].bio}</span>
                   </div>
                </div>
@@ -43,10 +43,14 @@ window.onload = function () {
       })
    }
    getStudents().then((students) => {
+      
       STUDENTS = students;
       students.forEach((student, index) => {
          addCard(student, index)
-
+         if (students.length - 1 === index) {
+            document.querySelector('.center-page').classList.add('d-none')
+            
+         }
       });
       console.log(STUDENTS);
    });

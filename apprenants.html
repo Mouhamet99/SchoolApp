@@ -18,6 +18,11 @@
 </head>
 
 <body>
+   <div class="center-page">
+      <div class="spinner-border" role="status">
+         <span class="visually-hidden">Loading...</span>
+      </div>
+   </div>
    <header class="">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
          <div class="container-fluid">
@@ -85,8 +90,8 @@
 
 
    <!-- Button trigger modal -->
-   <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#detail-modal">
-      Launch demo modal
+   <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#detail-modal">
+      Detail
    </button>
 
    <!-- Modal -->
@@ -103,14 +108,14 @@
                      <div class="card card-primary card-outline rounded-0 border-0">
                         <div class="card-body p-0 box-profile">
                            <div class="text-center">
-                              <img class="profile-user-img img-fluid rounded-circle" id="profil"
+                              <img class="profile-user-img img-fluid sp-img-cover rounded-circle" id="profil"
                                  src="https://via.placeholder.com/150" alt="User profile picture">
                            </div>
                            <h3 class="profile-username text-center" id="username">Mouhamet Dieye</h3>
                            <p class="text-muted text-center" id="level">Software Engineer</p>
                            <hr>
                            <div class="student-description">
-                              <p class=""><b>Description</b></p>
+                              <p class="text-uppercase"><b>Description</b></p>
                               <p class="text-muted " id="bio">
                                  B.S. in Computer Science from the University of Tennessee at Knoxville
                               </p>
@@ -120,7 +125,7 @@
                   </div>
                   <div class="col-12">
                      <div class="card border-0 rounded-0">
-                        <div class="card-header px-0 text-center">
+                        <div class="px-0 text-center">
                            <p class="m-0 m-0 fw-bold text-uppercase">Competences</p>
                         </div>
                         <div class="card-body">
@@ -128,22 +133,24 @@
                               <div class="row py-3 skill-item">
                                  <label class="px-0 " id="skill-item-label">HTML</label>
                                  <div class="progress px-0">
-                                    <div id="progress-bar"class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
-                                       aria-valuemin="0" aria-valuemax="100">25%</div>
+                                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 25%;"
+                                       aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
                                  </div>
                               </div>
                               <div class="row py-3 skill-item">
                                  <label class="px-0 " id="skill-item-label">JS</label>
                                  <div class="progress px-0">
-                                    <div id="progress-bar"class="progress-bar bg-danger" role="progressbar" style="width: 40%;"
-                                       aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%</div>
+                                    <div id="progress-bar" class="progress-bar bg-danger" role="progressbar"
+                                       style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%
+                                    </div>
                                  </div>
                               </div>
                               <div class="row py-3 skill-item">
                                  <label class="px-0 " id="skill-item-label">CSS</label>
                                  <div class="progress px-0">
-                                    <div id="progress-bar"class="progress-bar bg-warning"  role="progressbar" style="width: 90%;"
-                                       aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">90%</div>
+                                    <div id="progress-bar" class="progress-bar bg-warning" role="progressbar"
+                                       style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">90%
+                                    </div>
                                  </div>
                               </div>
                            </div>
