@@ -1,4 +1,4 @@
-import { uploadFiles, addStudent, getStudents } from './api.js'
+import { addStudent } from './api.js'
 window.onload = function () {
     // const studentRef = {
     //     data: {
