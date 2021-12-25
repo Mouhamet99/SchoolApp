@@ -26,7 +26,7 @@ window.onload = function () {
     const file = document.getElementById('profile-img')
 
     const btnFormSubmit = document.getElementById('btn-submit')
-    const saveStudentsButton = document.querySelector('#saveStudents')
+    const insertStudentBtn = document.querySelector('#saveStudents')
     const cardContainer = document.querySelector('#waiting-student-cards')
 
 
@@ -54,6 +54,7 @@ window.onload = function () {
         student.level = level.value
         student.image = file.files[0]
         student.url = url
+        student.fileName = file.files[0].name
 
 
         // student.created_at = Timestamp.fromDate(new Date())
@@ -79,8 +80,8 @@ window.onload = function () {
                         <div class="d-flex flex-row align-items-center">
                             <!-- <div class="icon"> <i class="fa fa-twitter"></i> </div> -->
                             <div class="icon  border border-4 border-secondary rounded-circle shadow-sm d-flex">
-                             <img class="rounded-circle img-fluid sp-img-cover" src="${student['data'].url}" alt="student profile image"> 
-                             </div>
+                                <img class="rounded-circle img-fluid sp-img-cover" src="${student['data'].url}" alt="student profile image"> 
+                            </div>
                             <div class="ms-2 c-details">
                                 <h6 class="mb-0" id="student-fullname" data-last-name="${student['data'].last_name}" data-first-name="${student['data'].first_name}" > ${student['data'].first_name} ${student['data'].last_name}</h6> 
                                 <strong id="student-level">${student['data'].level}</strong>
@@ -103,7 +104,7 @@ window.onload = function () {
                 </div>
         `;
 
-        saveStudentsButton.insertAdjacentHTML('beforebegin', card)
+        insertStudentBtn.insertAdjacentHTML('beforebegin', card)
 
         document.getElementById(`edit-student-${student.id}`).addEventListener('click', () => {
 
@@ -111,7 +112,7 @@ window.onload = function () {
             firstName.value = student["data"].first_name
             bio.value = student["data"].bio
             level.value = student["data"].level
-            file.files[0] = { ...student["data"].image }
+            file.files[0] = student["data"].image
             // levelOption.selected = true
 
             btnFormSubmit.classList.add('d-none')
@@ -158,13 +159,16 @@ window.onload = function () {
 
         addForm.reset()
     })
-    saveStudentsButton.addEventListener('click', (e) => {
+    insertStudentBtn.addEventListener('click', (e) => {
         e.preventDefault()
-        STUDENTS.forEach(newStudent => {
+        STUDENTS.forEach((newStudent, index) => {
+            let currentCard = document.getElementById(`${newStudent.id}`)
             addStudent(newStudent)
-
+            if (STUDENTS.length - 1 == index) {
+                sessionStorage.removeItem('students')
+                cardContainer.innerHTML = ''
+            }
         })
-        sessionStorage.removeItem('students')
 
     })
 

@@ -122,15 +122,17 @@ async function removeStudent(id) {
 /********************************/
 /*Insert a student from firestore database */
 /********************************/
-export function addStudent(newStudent) {
+export const addStudent = async (newStudent) => {
    try {
-      uploadFiles(newStudent['data'].image).then(urldata => {
-         console.log(urldata);
-         newStudent['data']['image'] = { name: newStudent['data']['image'].name, url: urldata }
+
+      await uploadFiles(newStudent['data'].image).then(urldata => {
+         newStudent['data']['image'] = { name: newStudent['data']['fileName'], url: urldata }
+
          delete newStudent['data'].url
-      }).then(()=>{
-         console.log(newStudent['data']);
-         const studentRef = addDoc(collection(db, "students"), {
+         delete newStudent['data'].fileName
+      }).then(() => {
+
+         addDoc(collection(db, "students"), {
             ...newStudent['data'],
             "created_at": Timestamp.fromDate(new Date()),
             "skills": [
@@ -139,11 +141,14 @@ export function addStudent(newStudent) {
                "{\"API\":80}"
             ]
          });
-         // const studentObj = getDoc(doc(db, "students", studentRef.id)).then(() => alert('Student Added Successfully😎😎👍👍'))
+
       })
+
    } catch (e) {
       console.error("Error adding student: ", e);
    }
+
+
 }
 // addStudent(student)
 
@@ -156,7 +161,7 @@ export const uploadFiles = async (file) => {
    if (!file) return;
    const storage = getStorage();
    // let url = window.URL.createObjectURL(file.files[0])
-   const storageRef = ref(storage, `userProfiles/${file.name}.png`);
+   const storageRef = ref(storage, `userProfiles/${file.name}`);
    let downloadURL = ""
    await uploadBytes(storageRef, file).then((snapshot) => getDownloadURL(snapshot.ref)).then(URL => {
       downloadURL = URL
