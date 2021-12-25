@@ -37,12 +37,10 @@ const db = getFirestore(app);
 //**************Uploaded a blob or file */
 // 'file' comes from the Blob or File API
 // uploadBytes(storageRef, file).then((snapshot) => {
-//   console.log('Uploaded a blob or file!');
 // });
 //**************Uploaded a file */
 // const message = 'This is my message.';
 // uploadString(storageRef, message).then((snapshot) => {
-//   console.log('Uploaded a raw string!');
 // });
 
 //*=================================================================
@@ -65,8 +63,6 @@ export const getStudents = async () => {
 
       return students
    } catch (error) {
-      console.log("Error  student👇👇\n");
-      console.log(error);
    }
 }
 
@@ -84,7 +80,6 @@ const updateStudent = async function (id, studentUpdated) {
       })
    } catch (e) {
       alert("Error Updating student👉👉\n");
-      console.log("Error Updating student👇👇\n", e);
    }
 }
 // "created_at": {

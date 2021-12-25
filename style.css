@@ -43,6 +43,14 @@ body {
     font-size: x-small;
 }
 
+.fs-small {
+    font-size:small;
+}
+
+.fs-smaller {
+    font-size:smaller;
+}
+
 .d-inline {
     background-color: #6c757d61;
     background-color: #6c757d26;

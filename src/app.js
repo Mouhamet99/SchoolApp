@@ -16,7 +16,7 @@ window.onload = function () {
     // };
     const STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
 
-    const addForm = document.getElementById('add-form')
+    const FORM = document.getElementById('add-form')
     const submitButton = document.querySelector('button[type="submit"]')
     const btnFormEdit = document.getElementById('save-edit')
     const lastName = document.getElementById('last-name')
@@ -25,7 +25,7 @@ window.onload = function () {
     const level = document.getElementById('level')
     const file = document.getElementById('profile-img')
 
-    const btnFormSubmit = document.getElementById('btn-submit')
+    // const submitButton = document.getElementById('btn-submit')
     const insertStudentBtn = document.querySelector('#saveStudents')
     const cardContainer = document.querySelector('#waiting-student-cards')
 
@@ -42,27 +42,80 @@ window.onload = function () {
         sessionStorage.setItem("students", JSON.stringify(STUDENTS));
         console.log(sessionStorage.getItem("students"));
     }
+    bio.addEventListener("input", (e) => {
+        const maxLength = 130;
+        let progress = document.querySelector("#text-progress");
+        let indicator = document.querySelector("#text-limit");
 
+        submitButton.disabled = false;
+        progress.innerText = e.target.value.length;
+
+        if (maxLength - e.target.value.length <= 0) {
+            progress.classList.remove("text-warning");
+            indicator.classList.add("text-danger");
+            submitButton.disabled = true;
+        } else if (maxLength - e.target.value.length <= 16) {
+            progress.classList.add("text-warning");
+            submitButton.disabled = true;
+        } else {
+            progress.classList.remove("text-warning");
+            indicator.classList.remove("text-danger");
+        }
+    });
+    const formIsValid = () => {
+        let lastNameValue = lastName.value.trim()
+        let firstNameValue = firstName.value.trim()
+        let bioValue = bio.value.trim()
+        let levelValue = level.value.trim()
+        let inputElements = [bio, lastName, firstName, level]
+        let values = [firstNameValue, lastNameValue, bioValue, levelValue]
+        let error = document.querySelector('#error')
+
+        if (file.files.length == 0 || values.includes("")) {
+            error.classList.remove('d-none')
+
+            inputElements.forEach(element => {
+                if (element.value.trim() == "") {
+                    element.classList.add('border-danger')
+                }
+            })
+            if (file.files.length == 0) {
+                file.classList.add('border-danger')
+            }
+            return false
+        }
+
+        file.classList.remove('border-danger')
+        inputElements.forEach(element => {
+            element.classList.remove('border-danger')
+        })
+        error.classList.add('d-none')
+
+        return true
+    }
     const onSubmitForm = (e) => {
         e.preventDefault();
-        let url = window.URL.createObjectURL(file.files[0])
-        const student = {}
+        if (formIsValid()) {
+            let url = window.URL.createObjectURL(file.files[0])
+            const student = {}
 
-        student.first_name = firstName.value
-        student.last_name = lastName.value
-        student.bio = bio.value
-        student.level = level.value
-        student.image = file.files[0]
-        student.url = url
-        student.fileName = file.files[0].name
+            student.first_name = firstName.value
+            student.last_name = lastName.value
+            student.bio = bio.value
+            student.level = level.value
+            student.image = file.files[0]
+            student.url = url
+            student.fileName = file.files[0].name
 
 
-        // student.created_at = Timestamp.fromDate(new Date())
-        // student.skills =  ['{"frontend":50}', '{"backend":90}', '{"Desingn":30}']
-        AddTosessionStorage({ data: student, id: Math.random().toString() })
-        addCard({ data: student, id: Math.random().toString() }, STUDENTS.length)
+            // student.created_at = Timestamp.fromDate(new Date())
+            // student.skills =  ['{"frontend":50}', '{"backend":90}', '{"Desingn":30}']
+            AddTosessionStorage({ data: student, id: Math.random().toString() })
+            addCard({ data: student, id: Math.random().toString() }, STUDENTS.length)
 
-        addForm.reset()
+            FORM.reset()
+        }
+
     }
     const UpdatedCard = (oldstudent, newstudent) => {
 
@@ -115,7 +168,7 @@ window.onload = function () {
             file.files[0] = student["data"].image
             // levelOption.selected = true
 
-            btnFormSubmit.classList.add('d-none')
+            submitButton.classList.add('d-none')
             btnFormEdit.classList.remove('d-none')
             btnFormEdit.setAttribute('data-card-to-update', student.id)
         })
@@ -152,17 +205,16 @@ window.onload = function () {
         })
         sessionStorage.setItem('students', JSON.stringify(STUDENTS))
 
-        btnFormSubmit.classList.remove('d-none')
+        submitButton.classList.remove('d-none')
         btnFormEdit.classList.add('d-none')
         btnFormEdit.setAttribute('data-card-to-update', "")
         // AddTosessionStorage({ data: student, id: Math.random().toString() })
 
-        addForm.reset()
+        FORM.reset()
     })
     insertStudentBtn.addEventListener('click', (e) => {
         e.preventDefault()
         STUDENTS.forEach((newStudent, index) => {
-            let currentCard = document.getElementById(`${newStudent.id}`)
             addStudent(newStudent)
             if (STUDENTS.length - 1 == index) {
                 sessionStorage.removeItem('students')

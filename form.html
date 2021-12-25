@@ -42,23 +42,26 @@
             <!-- general form elements -->
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title m-0 fs-5">Ajouter Apprenant</h3>
+                    <h3 class="card-title m-0 fs-5 text-center lead text-uppercase">Ajouter Apprenant</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
                 <form Id="add-form">
                     <div class="card-body">
+                        <div class="form-group">
+                            <p class=" text-danger text-center fs-smaller d-none" id="error">Verifier que les valeurs saisies sont correctes</p>
+                        </div>
                         <div class="mb-3">
                             <label for="last-name" class="form-label">Nom</label>
-                            <input type="text" class="form-control" id="last-name" placeholder="Votre nom">
+                            <input type="text" class="form-control" id="last-name" placeholder="Dieye">
                         </div>
                         <div class="mb-3">
                             <label for="first-name" class="form-label">Prenom</label>
-                            <input type="text" class="form-control" id="first-name" placeholder="Votre prenom">
+                            <input type="text" class="form-control" id="first-name" placeholder="Mouhamet">
                         </div>
                         <div class="mb-3">
                             <label for="bio" class="form-label">Biographie</label>
-                            <textarea class="form-control" id="bio" rows="3"></textarea>
+                            <textarea class="form-control" id="bio" rows="3" placeholder="Modou est un graphiste habitant à Keur Massar..."></textarea>
                             <p id="text-limit" class=" fs-x-small fw-bold py-2 text-end">
                                 Contenu saisi : <span id="text-progress">0</span>/130
                             </p>
@@ -74,7 +77,7 @@
                             <!-- <input class="form-control" type="file" id="profile-img" accept="image/*"> -->
                         </div>
                         <div class="mb-3">
-                            <label for="level" class="form-label">Biographie</label>
+                            <label for="level" class="form-label">Niveau</label>
                             <select class="form-select" aria-label="Default select example" id="level">
                                 <option selected>Selectionner le niveau</option>
                                 <option value="debutant">Debutant</option>
