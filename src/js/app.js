@@ -24,9 +24,12 @@ window.onload = function () {
     const bio = document.getElementById('bio')
     const level = document.getElementById('level')
     const file = document.getElementById('profile-img')
+    const api = document.getElementById('api')
+    const integration = document.getElementById('integration')
+    const design = document.getElementById('macquettage')
 
     // const submitButton = document.getElementById('btn-submit')
-    const insertStudentBtn = document.querySelector('#saveStudents')
+    const insertStudent = document.querySelector('#saveStudents')
     const cardContainer = document.querySelector('#waiting-student-cards')
 
 
@@ -68,8 +71,23 @@ window.onload = function () {
         let bioValue = bio.value.trim()
         let levelValue = level.value.trim()
         let inputElements = [bio, lastName, firstName, level]
-        let values = [firstNameValue, lastNameValue, bioValue, levelValue]
+        let apiPercent = api.value
+        let designPercent = design.value
+        let integrationPercent = integration.value
+        let values = [firstNameValue, lastNameValue, bioValue, levelValue, apiPercent, integrationPercent, designPercent]
+        let skills = [api, integration, design]
         let error = document.querySelector('#error')
+
+        file.classList.remove('border-danger')
+        skills.forEach(skill => {
+            if (skill.value == "" || typeof parseInt(skill)) {
+                skill.classList.remove('border-danger')
+            }
+        })
+        inputElements.forEach(element => {
+            element.classList.remove('border-danger')
+        })
+        error.classList.add('d-none')
 
         if (file.files.length == 0 || values.includes("")) {
             error.classList.remove('d-none')
@@ -79,23 +97,25 @@ window.onload = function () {
                     element.classList.add('border-danger')
                 }
             })
+            skills.forEach(skill => {
+                if (skill.value == "" || typeof parseInt(skill) != "number") {
+                    skill.classList.add('border-danger')
+                }
+            })
             if (file.files.length == 0) {
                 file.classList.add('border-danger')
             }
             return false
         }
 
-        file.classList.remove('border-danger')
-        inputElements.forEach(element => {
-            element.classList.remove('border-danger')
-        })
-        error.classList.add('d-none')
+        
 
         return true
     }
     const onSubmitForm = (e) => {
         e.preventDefault();
         if (formIsValid()) {
+            insertStudent.classList.remove('d-none')
             let url = window.URL.createObjectURL(file.files[0])
             const student = {}
 
@@ -103,6 +123,7 @@ window.onload = function () {
             student.last_name = lastName.value
             student.bio = bio.value
             student.level = level.value
+            student.skills = [{ api: api.value }, { design: design.value }, { integration: integration.value }]
             student.image = file.files[0]
             student.url = url
             student.fileName = file.files[0].name
@@ -115,9 +136,6 @@ window.onload = function () {
 
             FORM.reset()
         }
-
-    }
-    const UpdatedCard = (oldstudent, newstudent) => {
 
     }
     const removeStudent = (id, index) => {
@@ -157,7 +175,7 @@ window.onload = function () {
                 </div>
         `;
 
-        insertStudentBtn.insertAdjacentHTML('beforebegin', card)
+        insertStudent.insertAdjacentHTML('beforebegin', card)
 
         document.getElementById(`edit-student-${student.id}`).addEventListener('click', () => {
 
@@ -183,36 +201,38 @@ window.onload = function () {
 
     btnFormEdit.addEventListener('click', (e) => {
         e.preventDefault()
+        if (formIsValid()) {
 
-        let id = e.target.dataset.cardToUpdate
-        let currentCard = document.getElementById(`${id}`)
-        let ClONE_STUDENTS = [...STUDENTS]
-        const student = {}
+            let id = e.target.dataset.cardToUpdate
+            let currentCard = document.getElementById(`${id}`)
+            let ClONE_STUDENTS = [...STUDENTS]
+            const student = {}
 
-        currentCard.querySelector('#student-fullname').innerHTML = firstName.value + "  " + lastName.value
-        currentCard.querySelector('#student-bio').innerHTML = bio.value
-        currentCard.querySelector('#student-level').innerHTML = level.value
+            currentCard.querySelector('#student-fullname').innerHTML = firstName.value + "  " + lastName.value
+            currentCard.querySelector('#student-bio').innerHTML = bio.value
+            currentCard.querySelector('#student-level').innerHTML = level.value
 
-        student.first_name = firstName.value
-        student.last_name = lastName.value
-        student.bio = bio.value
-        student.level = level.value
+            student.first_name = firstName.value
+            student.last_name = lastName.value
+            student.bio = bio.value
+            student.level = level.value
+            student.skills = [{ api: api.value, integration: integration.value, design: design.value }]
+            ClONE_STUDENTS.forEach((clone_student, i) => {
+                if (clone_student.id === id) {
+                    STUDENTS.splice(i, 1, { data: student, id: id })
+                }
+            })
+            sessionStorage.setItem('students', JSON.stringify(STUDENTS))
 
-        ClONE_STUDENTS.forEach((clone_student, i) => {
-            if (clone_student.id === id) {
-                STUDENTS.splice(i, 1, { data: student, id: id })
-            }
-        })
-        sessionStorage.setItem('students', JSON.stringify(STUDENTS))
+            submitButton.classList.remove('d-none')
+            btnFormEdit.classList.add('d-none')
+            btnFormEdit.setAttribute('data-card-to-update', "")
+            // AddTosessionStorage({ data: student, id: Math.random().toString() })
 
-        submitButton.classList.remove('d-none')
-        btnFormEdit.classList.add('d-none')
-        btnFormEdit.setAttribute('data-card-to-update', "")
-        // AddTosessionStorage({ data: student, id: Math.random().toString() })
-
-        FORM.reset()
+            FORM.reset()
+        }
     })
-    insertStudentBtn.addEventListener('click', (e) => {
+    insertStudent.addEventListener('click', (e) => {
         e.preventDefault()
         STUDENTS.forEach((newStudent, index) => {
             addStudent(newStudent)

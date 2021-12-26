@@ -130,11 +130,7 @@ export const addStudent = async (newStudent) => {
          addDoc(collection(db, "students"), {
             ...newStudent['data'],
             "created_at": Timestamp.fromDate(new Date()),
-            "skills": [
-               "{\"frontend\":50}",
-               "{\"backend\":80}",
-               "{\"API\":80}"
-            ]
+            "skills": newStudent['data']['skills'].map(skill => JSON.stringify(skill))
          });
 
       })
