@@ -38,7 +38,7 @@ window.onload = function () {
         STUDENTS.forEach((student, index) => {
             addCard(student, index)
         });
-        if(STUDENTS.length !== 0){
+        if (STUDENTS.length !== 0) {
             insertStudent.classList.remove('d-none')
         }
     }
@@ -109,7 +109,7 @@ window.onload = function () {
             return false
         }
 
-        
+
 
         return true
     }
@@ -240,9 +240,8 @@ window.onload = function () {
             if (STUDENTS.length - 1 == index) {
                 STUDENTS = []
                 sessionStorage.removeItem('students')
-                cardContainer.innerHTML = ''
-                // cardContainer.insertAdjacentElement('beforeend',insertStudent)
-                location.reload()
+                document.querySelectorAll('.waiting-student-card').forEach(card => card.remove())
+                e.target.classList.add('d-none')
             }
         })
 
