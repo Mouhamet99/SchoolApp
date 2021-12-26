@@ -14,7 +14,7 @@ window.onload = function () {
     //     },
     //     id: "RNteYV3u44cTUARnTK",
     // };
-    const STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
+    let STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
 
     const FORM = document.getElementById('add-form')
     const submitButton = document.querySelector('button[type="submit"]')
@@ -36,14 +36,15 @@ window.onload = function () {
     const displayWaitingCards = () => {
 
         STUDENTS.forEach((student, index) => {
-            console.log(student);
             addCard(student, index)
         });
+        if(STUDENTS.length !== 0){
+            insertStudent.classList.remove('d-none')
+        }
     }
     const AddTosessionStorage = (student) => {
         STUDENTS.push(student);
         sessionStorage.setItem("students", JSON.stringify(STUDENTS));
-        console.log(sessionStorage.getItem("students"));
     }
     bio.addEventListener("input", (e) => {
         const maxLength = 130;
@@ -237,8 +238,11 @@ window.onload = function () {
         STUDENTS.forEach((newStudent, index) => {
             addStudent(newStudent)
             if (STUDENTS.length - 1 == index) {
+                STUDENTS = []
                 sessionStorage.removeItem('students')
                 cardContainer.innerHTML = ''
+                // cardContainer.insertAdjacentElement('beforeend',insertStudent)
+                location.reload()
             }
         })
 
