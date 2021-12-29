@@ -1,6 +1,6 @@
 import {
-   initializeApp, getApp
-} from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+   initializeApp, 
+} from 'firebase/app';
 
 import {
    getFirestore,
@@ -11,12 +11,9 @@ import {
    getDocs,
    getDoc,
    doc,
-   query,
-   where,
-   orderBy,
    Timestamp
-} from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
-import { getStorage, ref, uploadBytes, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+} from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 //Config
 const firebaseConfig = {
