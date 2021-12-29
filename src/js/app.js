@@ -1,21 +1,7 @@
 import { addStudent } from './api.js'
 window.onload = function () {
-    // const studentRef = {
-    //     data: {
-    //         first_name: "Maman",
-    //         bio: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quo eum ea exercitationem ex. Eaque at eum saepe? Odit, sunt.",
-    //         last_name: "DIOP",
-    //         skills: ['{"frontend":50}', '{"backend":80}', '{"API":80}'],
-    //         level: "debutant",
-    //         created_at: {
-    //             seconds: 1640260381,
-    //             nanoseconds: 698000000,
-    //         },
-    //     },
-    //     id: "RNteYV3u44cTUARnTK",
-    // };
-    let STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
 
+    let STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
     const FORM = document.getElementById('add-form')
     const submitButton = document.querySelector('button[type="submit"]')
     const btnFormEdit = document.getElementById('save-edit')
@@ -27,8 +13,6 @@ window.onload = function () {
     const api = document.getElementById('api')
     const integration = document.getElementById('integration')
     const design = document.getElementById('macquettage')
-
-    // const submitButton = document.getElementById('btn-submit')
     const insertStudent = document.querySelector('#saveStudents')
     const cardContainer = document.querySelector('#waiting-student-cards')
 
@@ -150,7 +134,6 @@ window.onload = function () {
         <div class="card p-3 my-2 waiting-student-card" id="${student.id}">
                     <div class="row">
                         <div class="d-flex flex-row align-items-center">
-                            <!-- <div class="icon"> <i class="fa fa-twitter"></i> </div> -->
                             <div class="icon  border border-4 border-secondary rounded-circle shadow-sm d-flex">
                                 <img class="rounded-circle img-fluid sp-img-cover" src="${student['data'].url}" alt="student profile image"> 
                             </div>
@@ -246,10 +229,4 @@ window.onload = function () {
         })
 
     })
-
-
-
-
-
-
 };
