@@ -1,6 +1,4 @@
-import {
-   initializeApp, 
-} from 'firebase/app';
+import {initializeApp} from 'firebase/app';
 
 import {
    getFirestore,
@@ -25,20 +23,11 @@ const firebaseConfig = {
    appId: "1:25534545863:web:c8a1a2819de62374a6e3e2",
    measurementId: "G-MP998X4K24"
 };
-
+import 'regenerator-runtime/runtime'
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-//**************Uploaded a blob or file */
-// 'file' comes from the Blob or File API
-// uploadBytes(storageRef, file).then((snapshot) => {
-// });
-//**************Uploaded a file */
-// const message = 'This is my message.';
-// uploadString(storageRef, message).then((snapshot) => {
-// });
 
 //*=================================================================
 //*=================================================================
