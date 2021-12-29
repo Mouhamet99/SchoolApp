@@ -1,9 +1,6 @@
+// import 'regenerator-runtime/runtime' ;
 import { addStudent } from './api.js'
 window.onload = function () {
-    const REGEX = /apprenants\.html$/
-    if (REGEX.test(window.location.pathname)) {
-        return false
-    }
     let STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
     const FORM = document.getElementById('add-form')
     const submitButton = document.querySelector('button[type="submit"]')
@@ -184,7 +181,7 @@ window.onload = function () {
 
     displayWaitingCards()
 
-    submitButton.addEventListener('click', onSubmitForm)
+    submitButton.addEventListener('click', (e)=>onSubmitForm(e))
 
     btnFormEdit.addEventListener('click', (e) => {
         e.preventDefault()

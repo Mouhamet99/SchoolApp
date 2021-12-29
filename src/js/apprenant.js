@@ -1,5 +1,4 @@
 import { getStudents } from './api.js'
-
 window.onload = function () {
    const REGEX = /apprenants\.html$/
    if (!REGEX.test(window.location.pathname)) {
