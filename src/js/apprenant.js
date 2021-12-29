@@ -50,10 +50,8 @@ window.onload = function () {
          addCard(student, index)
          if (students.length - 1 === index) {
             document.querySelector('.center-page').classList.add('d-none')
-            
          }
       });
-      console.log(STUDENTS);
    });
    const updateDetailModal = (student) => {
       const modal = document.querySelector('#detail-modal')
