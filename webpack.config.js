@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
    context: path.resolve(__dirname, './'),
-   entry: ["regenerator-runtime/runtime.js", './src/js/app.js'],
+   entry: ["regenerator-runtime/runtime.js", './src/js/app.js', './src/js/apprenant.js'],
    // entry: {
    //    home: './src/js/app.js',
    //    students: './src/js/apprenant.js',

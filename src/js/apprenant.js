@@ -1,9 +1,13 @@
 import { getStudents } from './api.js'
 
 window.onload = function () {
+   const REGEX = /apprenants\.html$/
+   if (!REGEX.test(window.location.pathname)) {
+      return false
+   }
    let STUDENTS = []
-   const cardContainer = document.querySelector('#students_container')
    const addCard = (student, index) => {
+      const cardContainer = document.querySelector('#students_container')
 
       const card = `
       <div class="col">
@@ -44,7 +48,7 @@ window.onload = function () {
       })
    }
    getStudents().then((students) => {
-      
+
       STUDENTS = students;
       students.forEach((student, index) => {
          addCard(student, index)
@@ -61,7 +65,7 @@ window.onload = function () {
       const level = modal.querySelector('#level')
       const bio = modal.querySelector('#bio')
       const skills = modal.querySelector('#skills')
-      const colors = ["primary", "warning", "danger", "info","success"]
+      const colors = ["primary", "warning", "danger", "info", "success"]
 
       profile.src = student['image']['url']
       username.textContent = student['first_name'] + ' ' + student['last_name']

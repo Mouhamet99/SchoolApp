@@ -1,6 +1,9 @@
 import { addStudent } from './api.js'
 window.onload = function () {
-
+    const REGEX = /apprenants\.html$/
+    if (REGEX.test(window.location.pathname)) {
+        return false
+    }
     let STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
     const FORM = document.getElementById('add-form')
     const submitButton = document.querySelector('button[type="submit"]')
