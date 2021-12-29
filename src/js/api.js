@@ -1,4 +1,4 @@
-import {initializeApp} from 'firebase/app';
+import { initializeApp } from 'firebase/app';
 
 import {
    getFirestore,
@@ -23,7 +23,7 @@ const firebaseConfig = {
    appId: "1:25534545863:web:c8a1a2819de62374a6e3e2",
    measurementId: "G-MP998X4K24"
 };
-import 'regenerator-runtime/runtime'
+// import 'regenerator-runtime/runtime'
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -52,8 +52,6 @@ export const getStudents = async () => {
    }
 }
 
-
-
 /********************************/
 //Update a students in databases /
 /********************************/
@@ -68,23 +66,6 @@ const updateStudent = async function (id, studentUpdated) {
       alert("Error Updating student👉👉\n");
    }
 }
-// "created_at": {
-//    "seconds": 1640262000,
-//    "nanoseconds": 0
-// },
-const student = {
-   "first_name": "Maman",
-   "skills": [
-      "{\"frontend\":50}",
-      "{\"backend\":80}",
-      "{\"API\":80}"
-   ],
-   "level": "debutant",
-   "bio": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quo eum ea exercitationem ex. Eaque at eum saepe? Odit, sunt.",
-   "last_name": "DIOP",
-   "created_at": Timestamp.fromDate(new Date())
-}
-//updateStudent("RNteYV3uOo44cTUARnTK", student);
 
 /********************************/
 /*Remove a student from firestore database */
@@ -98,7 +79,6 @@ async function removeStudent(id) {
       alert("Error Deleting student🤦‍♂️🤷‍♀️🤷‍♀️");
    }
 }
-//removeStudent("vcSLdIpa92Wf2kZbRNvF")
 
 /********************************/
 /*Insert a student from firestore database */
@@ -127,7 +107,6 @@ export const addStudent = async (newStudent) => {
 
 
 }
-// addStudent(student)
 
 /********************************/
 /*Uppload file */
@@ -137,11 +116,11 @@ export const uploadFiles = async (file) => {
    //
    if (!file) return;
    const storage = getStorage();
-   // let url = window.URL.createObjectURL(file.files[0])
    const storageRef = ref(storage, `userProfiles/${file.name}`);
    let downloadURL = ""
    await uploadBytes(storageRef, file).then((snapshot) => getDownloadURL(snapshot.ref)).then(URL => {
       downloadURL = URL
    });
+
    return downloadURL
 };

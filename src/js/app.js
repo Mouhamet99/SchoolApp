@@ -1,6 +1,11 @@
 // import 'regenerator-runtime/runtime' ;
 import { addStudent } from './api.js'
-window.onload = function () {
+window.addEventListener('DOMContentLoaded', function () {
+    const REGEX = /apprenants\.html$/;
+    if (REGEX.test(window.location.pathname)) {
+        return
+    }
+    console.log('index.html');
     let STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
     const FORM = document.getElementById('add-form')
     const submitButton = document.querySelector('button[type="submit"]')
@@ -18,7 +23,6 @@ window.onload = function () {
 
 
     const displayWaitingCards = () => {
-
         STUDENTS.forEach((student, index) => {
             addCard(student, index)
         });
@@ -26,6 +30,7 @@ window.onload = function () {
             insertStudent.classList.remove('d-none')
         }
     }
+
     const AddTosessionStorage = (student) => {
         STUDENTS.push(student);
         sessionStorage.setItem("students", JSON.stringify(STUDENTS));
@@ -50,6 +55,7 @@ window.onload = function () {
             indicator.classList.remove("text-danger");
         }
     });
+
     const formIsValid = () => {
         let lastNameValue = lastName.value.trim()
         let firstNameValue = firstName.value.trim()
@@ -90,10 +96,9 @@ window.onload = function () {
             if (file.files.length == 0) {
                 file.classList.add('border-danger')
             }
+
             return false
         }
-
-
 
         return true
     }
@@ -114,8 +119,6 @@ window.onload = function () {
             student.fileName = file.files[0].name
 
 
-            // student.created_at = Timestamp.fromDate(new Date())
-            // student.skills =  ['{"frontend":50}', '{"backend":90}', '{"Desingn":30}']
             AddTosessionStorage({ data: student, id: Math.random().toString() })
             addCard({ data: student, id: Math.random().toString() }, STUDENTS.length)
 
@@ -168,7 +171,6 @@ window.onload = function () {
             bio.value = student["data"].bio
             level.value = student["data"].level
             file.files[0] = student["data"].image
-            // levelOption.selected = true
 
             submitButton.classList.add('d-none')
             btnFormEdit.classList.remove('d-none')
@@ -181,7 +183,7 @@ window.onload = function () {
 
     displayWaitingCards()
 
-    submitButton.addEventListener('click', (e)=>onSubmitForm(e))
+    submitButton.addEventListener('click', (e) => onSubmitForm(e))
 
     btnFormEdit.addEventListener('click', (e) => {
         e.preventDefault()
@@ -201,6 +203,7 @@ window.onload = function () {
             student.bio = bio.value
             student.level = level.value
             student.skills = [{ api: api.value, integration: integration.value, design: design.value }]
+
             ClONE_STUDENTS.forEach((clone_student, i) => {
                 if (clone_student.id === id) {
                     STUDENTS.splice(i, 1, { data: student, id: id })
@@ -211,7 +214,6 @@ window.onload = function () {
             submitButton.classList.remove('d-none')
             btnFormEdit.classList.add('d-none')
             btnFormEdit.setAttribute('data-card-to-update', "")
-            // AddTosessionStorage({ data: student, id: Math.random().toString() })
 
             FORM.reset()
         }
@@ -229,4 +231,4 @@ window.onload = function () {
         })
 
     })
-};
+})

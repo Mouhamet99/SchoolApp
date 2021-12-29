@@ -3,19 +3,13 @@ const path = require('path');
 module.exports = {
    context: path.resolve(__dirname, './'),
    entry: ["regenerator-runtime/runtime.js", './src/js/apprenant.js', './src/js/app.js'],
-   // entry: {
-   //    home: './src/js/app.js',
-   //    students: './src/js/apprenant.js',
-   // },
    experiments: {
       outputModule: true,
    },
    output: {
       module: true,
-      asyncChunks: true,
       filename: 'main.js',
       path: path.resolve(__dirname, 'dist'),
-
    },
    devtool: 'eval-source-map',
    mode: 'development',
@@ -34,9 +28,5 @@ module.exports = {
          }
       ]
 
-   },
-   externalsType: 'script',
-   externals: {
-      firbase: ['https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js', '_'],
    },
 };
