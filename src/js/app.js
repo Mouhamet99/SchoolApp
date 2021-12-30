@@ -220,14 +220,17 @@ window.addEventListener('DOMContentLoaded', function () {
     })
     insertStudent.addEventListener('click', (e) => {
         e.preventDefault()
+        document.querySelector('.center-page').classList.remove('d-none')
         STUDENTS.forEach((newStudent, index) => {
-            addStudent(newStudent)
-            if (STUDENTS.length - 1 == index) {
-                STUDENTS = []
-                sessionStorage.removeItem('students')
-                document.querySelectorAll('.waiting-student-card').forEach(card => card.remove())
-                e.target.classList.add('d-none')
-            }
+            addStudent(newStudent).then(() => {
+                if (STUDENTS.length - 1 == index) {
+                    STUDENTS = []
+                    sessionStorage.removeItem('students')
+                    document.querySelectorAll('.waiting-student-card').forEach(card => card.remove())
+                    e.target.classList.add('d-none')
+                    document.querySelector('.center-page').classList.add('d-none')
+                }
+            })
         })
 
     })

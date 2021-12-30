@@ -8,6 +8,8 @@ import {
    deleteDoc,
    getDocs,
    getDoc,
+   orderBy,
+   query,
    doc,
    Timestamp
 } from 'firebase/firestore';
@@ -37,17 +39,31 @@ const db = getFirestore(app);
 /********************************/
 export const getStudents = async () => {
    try {
+      // const studentsCollection = collection(db, 'students');
+      // const studentSnapshot = await getDocs(studentsCollection);
+
+      // let students = studentSnapshot.docs.map(doc => {
+      //    return {
+      //       "data": doc.data(),
+      //       "id": doc.id
+      //    }
+      // });
+
+      // return students
       const studentsCollection = collection(db, 'students');
-      const studentSnapshot = await getDocs(studentsCollection);
-
-      let students = studentSnapshot.docs.map(doc => {
-         return {
-            "data": doc.data(),
-            "id": doc.id
-         }
+      const q = await query(studentsCollection, orderBy("created_at", "asc"));
+      const querySnapshot = await getDocs(q);
+      let studentsList = []
+      querySnapshot.forEach((doc) => {
+         studentsList.push({
+            id: doc.id,
+            data: doc.data()
+         })
       });
+      return studentsList;
 
-      return students
+
+
    } catch (error) {
    }
 }
