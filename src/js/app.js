@@ -5,11 +5,11 @@ window.addEventListener('DOMContentLoaded', function () {
     if (REGEX.test(window.location.pathname)) {
         return
     }
-    console.log('index.html');
+    console.log('Home Page');
     let STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
     const FORM = document.getElementById('add-form')
     const submitButton = document.querySelector('button[type="submit"]')
-    const btnFormEdit = document.getElementById('save-edit')
+    const btnEditForm = document.getElementById('save-edit')
     const lastName = document.getElementById('last-name')
     const firstName = document.getElementById('first-name')
     const bio = document.getElementById('bio')
@@ -119,8 +119,8 @@ window.addEventListener('DOMContentLoaded', function () {
             student.fileName = file.files[0].name
 
 
-            AddTosessionStorage({ data: student, id: Math.random().toString() })
-            addCard({ data: student, id: Math.random().toString() }, STUDENTS.length)
+            AddTosessionStorage({ data: student, id: new Date().getTime().toString() })
+            addCard({ data: student, id: new Date().getTime().toString() }, STUDENTS.length)
 
             FORM.reset()
         }
@@ -159,6 +159,8 @@ window.addEventListener('DOMContentLoaded', function () {
                             <span class="text-muted" id="student-bio">${student['data'].bio}</span>
                         </div>
                     </div>
+                    <div class="row" id="">
+                    </div>
                 </div>
         `;
 
@@ -171,10 +173,13 @@ window.addEventListener('DOMContentLoaded', function () {
             bio.value = student["data"].bio
             level.value = student["data"].level
             file.files[0] = student["data"].image
+            api.value = student["data"]["skills"][0]["api"]
+            integration.value = student["data"]["skills"][0]["integration"]
+            design.value = student["data"]["skills"][0]["design"]
 
             submitButton.classList.add('d-none')
-            btnFormEdit.classList.remove('d-none')
-            btnFormEdit.setAttribute('data-card-to-update', student.id)
+            btnEditForm.classList.remove('d-none')
+            btnEditForm.setAttribute('data-card-to-update', student.id)
         })
         document.getElementById(`remove-student-${student.id}`).addEventListener('click', () => {
             removeStudent(student.id, index)
@@ -185,7 +190,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     submitButton.addEventListener('click', (e) => onSubmitForm(e))
 
-    btnFormEdit.addEventListener('click', (e) => {
+    btnEditForm.addEventListener('click', (e) => {
         e.preventDefault()
         if (formIsValid()) {
 
@@ -212,9 +217,8 @@ window.addEventListener('DOMContentLoaded', function () {
             sessionStorage.setItem('students', JSON.stringify(STUDENTS))
 
             submitButton.classList.remove('d-none')
-            btnFormEdit.classList.add('d-none')
-            btnFormEdit.setAttribute('data-card-to-update', "")
-
+            e.target.classList.add('d-none')
+            e.target.setAttribute('data-card-to-update', "")
             FORM.reset()
         }
     })
