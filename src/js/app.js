@@ -5,6 +5,10 @@ window.addEventListener('DOMContentLoaded', function () {
     if (REGEX.test(window.location.pathname)) {
         return
     }
+    const logo = document.querySelector('#logo')
+    logo.addEventListener('click', ()=>{
+        window.location.href = "../index.html"
+    })
     console.log('Home Page');
     let STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
     const FORM = document.getElementById('add-form')
