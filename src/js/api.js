@@ -49,7 +49,7 @@ export const getStudents = async () => {
       //    }
       // });
 
-      // return students
+      // return student
       const studentsCollection = collection(db, 'students');
       const q = await query(studentsCollection, orderBy("created_at", "asc"));
       const querySnapshot = await getDocs(q);

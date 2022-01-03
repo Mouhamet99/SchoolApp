@@ -55,7 +55,26 @@ window.addEventListener('DOMContentLoaded', function () {
             indicator.classList.remove("text-danger");
         }
     });
+    function loadURLToInputFiled(url) {
+        getImgURL(url, (imgBlob) => {
+            // let fileName = 'hasFilename.jpg'
+            // let file = new File([imgBlob], fileName, { type: "image/png", lastModified: new Date().getTime() }, 'utf-8');
+            let container = new DataTransfer();
+            container.items.add(file.files[0]);
+            document.querySelector('#file_input').files = container.files;
 
+        })
+    }
+    const test = () => {
+        var file = document.getElementById('file').files[0];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var image = document.createElement("img");
+            image.src = e.target.result;
+            document.body.appendChild(image);
+        }
+        reader.readAsDataURL(file);
+    }
     const formIsValid = () => {
         let lastNameValue = lastName.value.trim()
         let firstNameValue = firstName.value.trim()
@@ -70,13 +89,11 @@ window.addEventListener('DOMContentLoaded', function () {
         let error = document.querySelector('#error')
 
         file.classList.remove('border-danger')
-        skills.forEach(skill => {
-            if (skill.value == "" || typeof parseInt(skill)) {
-                skill.classList.remove('border-danger')
-            }
-        })
         inputElements.forEach(element => {
             element.classList.remove('border-danger')
+        })
+        skills.forEach(skill => {
+            skill.classList.remove('border-danger')
         })
         error.classList.add('d-none')
 
@@ -89,16 +106,31 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
             })
             skills.forEach(skill => {
-                if (skill.value == "" || typeof parseInt(skill) != "number") {
+                if (skill.value == "" || typeof parseInt(skill.value) != "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0) {
                     skill.classList.add('border-danger')
                 }
             })
-            if (file.files.length == 0) {
-                file.classList.add('border-danger')
-            }
+            file.files[0] ?? file.classList.add('border-danger')
 
             return false
         }
+        // if(skills.some(skill => typeof parseInt(skill.value) != "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0)){
+        //     skills.forEach(skill => {
+        //         if (skill.value == "" || typeof parseInt(skill.value) != "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0) {
+        //             skill.classList.add('border-danger')
+        //         }
+        //     })
+        //     return false
+        // }
+        // if (skills.some(skill => typeof parseInt(skill.value) !== "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0)) {
+        //     skills.forEach(skill => {
+        //         if (skill.value == "" || typeof parseInt(skill.value) !== "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0) {
+        //             skill.classList.add('border-danger')
+        //         }
+        //     })
+        //     return false
+        // }
+        // Number.isNaN(parseInt(macquettage.value))
 
         return true
     }
@@ -120,7 +152,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
 
             AddTosessionStorage({ data: student, id: new Date().getTime().toString() })
-            addCard({ data: student, id: new Date().getTime().toString() }, STUDENTS.length)
+            addCard({ data: student, id: new Date().getTime().toString() }, STUDENTS.length - 1)
 
             FORM.reset()
         }
@@ -128,9 +160,13 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     const removeStudent = (id, index) => {
         STUDENTS.splice(index, 1)
+        console.log(index);
         sessionStorage.setItem('students', JSON.stringify(STUDENTS))
         let currentCard = document.getElementById(`${id}`)
         currentCard.remove()
+        if(STUDENTS.length == 0){
+            insertStudent.classList.add('d-none')
+        }
     }
     const addCard = (student, index) => {
         const card = `
@@ -138,7 +174,7 @@ window.addEventListener('DOMContentLoaded', function () {
                     <div class="row">
                         <div class="d-flex flex-row align-items-center">
                             <div class="icon  border border-4 border-secondary rounded-circle shadow-sm d-flex">
-                                <img class="rounded-circle img-fluid sp-img-cover" src="${student['data'].url}" alt="student profile image"> 
+                                <img class="rounded-circle img-fluid sp-img-cover" id="student-profil" src="${student['data'].url}" alt="student profile image"> 
                             </div>
                             <div class="ms-2 c-details">
                                 <h6 class="mb-0" id="student-fullname" data-last-name="${student['data'].last_name}" data-first-name="${student['data'].first_name}" > ${student['data'].first_name} ${student['data'].last_name}</h6> 
@@ -172,10 +208,14 @@ window.addEventListener('DOMContentLoaded', function () {
             firstName.value = student["data"].first_name
             bio.value = student["data"].bio
             level.value = student["data"].level
-            file.files[0] = student["data"].image
+            // file.files[0] = student["data"].image
+            // let container = new DataTransfer();
+            console.log(student["data"].image);
+            // file.items.add(student["data"].image);
+            // document.querySelector('#file_input').files = container.files;
             api.value = student["data"]["skills"][0]["api"]
-            integration.value = student["data"]["skills"][0]["integration"]
-            design.value = student["data"]["skills"][0]["design"]
+            integration.value = student["data"]["skills"][2]["integration"]
+            design.value = student["data"]["skills"][1]["design"]
 
             submitButton.classList.add('d-none')
             btnEditForm.classList.remove('d-none')
@@ -193,8 +233,8 @@ window.addEventListener('DOMContentLoaded', function () {
     btnEditForm.addEventListener('click', (e) => {
         e.preventDefault()
         if (formIsValid()) {
-
             let id = e.target.dataset.cardToUpdate
+            let url = window.URL.createObjectURL(file.files[0])
             let currentCard = document.getElementById(`${id}`)
             let ClONE_STUDENTS = [...STUDENTS]
             const student = {}
@@ -202,11 +242,15 @@ window.addEventListener('DOMContentLoaded', function () {
             currentCard.querySelector('#student-fullname').innerHTML = firstName.value + "  " + lastName.value
             currentCard.querySelector('#student-bio').innerHTML = bio.value
             currentCard.querySelector('#student-level').innerHTML = level.value
+            currentCard.querySelector('#student-profil').src = url
 
             student.first_name = firstName.value
             student.last_name = lastName.value
             student.bio = bio.value
             student.level = level.value
+            student.image = file.files[0]
+            student.url = url
+            student.fileName = file.files[0].name
             student.skills = [{ api: api.value, integration: integration.value, design: design.value }]
 
             ClONE_STUDENTS.forEach((clone_student, i) => {
