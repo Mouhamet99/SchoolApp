@@ -25,7 +25,6 @@ window.addEventListener('DOMContentLoaded', function () {
     const insertStudent = document.querySelector('#saveStudents')
     const cardContainer = document.querySelector('#waiting-student-cards')
 
-
     const displayWaitingCards = () => {
         STUDENTS.forEach((student, index) => {
             addCard(student, index)
@@ -34,11 +33,21 @@ window.addEventListener('DOMContentLoaded', function () {
             insertStudent.classList.remove('d-none')
         }
     }
-
+    
     const AddTosessionStorage = (student) => {
         STUDENTS.push(student);
         sessionStorage.setItem("students", JSON.stringify(STUDENTS));
     }
+    [api, integration, design].forEach(skill=>{
+        skill.addEventListener('input', (e)=>{
+            if(parseInt(e.target.value) > 100){
+                e.target.value = 100
+            }
+            if(parseInt(e.target.value) < 0){
+                e.target.value = 0
+            }
+        })
+    })
     bio.addEventListener("input", (e) => {
         const maxLength = 130;
         let progress = document.querySelector("#text-progress");

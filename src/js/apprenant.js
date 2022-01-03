@@ -1,15 +1,12 @@
-
-
-
-   import { getStudents } from './api.js';
+import { getStudents } from './api.js';
 window.addEventListener('DOMContentLoaded', function () {
    const REGEX = /apprenants\.html$/;
    if (!REGEX.test(window.location.pathname)) {
-      return 
+      return
    }
    const logo = document.querySelector('#logo')
-   logo.addEventListener('click', ()=>{
-       window.location.href = "../index.html"
+   logo.addEventListener('click', () => {
+      window.location.href = "../index.html"
    })
    const addCard = (student) => {
       const cardContainer = document.querySelector('#students_container')
