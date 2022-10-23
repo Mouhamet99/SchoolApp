@@ -69,7 +69,7 @@ export const getStudents = async () => {
 }
 
 /********************************/
-//Update a students in databases /
+//Update a students in databases //
 /********************************/
 const updateStudent = async function (id, studentUpdated) {
    try {

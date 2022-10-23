@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', function () {
         return
     }
     const logo = document.querySelector('#logo')
-    logo.addEventListener('click', ()=>{
+    logo.addEventListener('click', () => {
         window.location.href = "../index.html"
     })
     console.log('Home Page');
@@ -33,17 +33,17 @@ window.addEventListener('DOMContentLoaded', function () {
             insertStudent.classList.remove('d-none')
         }
     }
-    
+
     const AddTosessionStorage = (student) => {
         STUDENTS.push(student);
         sessionStorage.setItem("students", JSON.stringify(STUDENTS));
     }
-    [api, integration, design].forEach(skill=>{
-        skill.addEventListener('input', (e)=>{
-            if(parseInt(e.target.value) > 100){
+    [api, integration, design].forEach(skill => {
+        skill.addEventListener('input', (e) => {
+            if (parseInt(e.target.value) > 100) {
                 e.target.value = 100
             }
-            if(parseInt(e.target.value) < 0){
+            if (parseInt(e.target.value) < 0) {
                 e.target.value = 0
             }
         })
@@ -119,7 +119,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
             })
             skills.forEach(skill => {
-                if (skill.value == "" || typeof parseInt(skill.value) != "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0) {
+                if (skill.value == "" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0) {
                     skill.classList.add('border-danger')
                 }
             })
@@ -127,24 +127,6 @@ window.addEventListener('DOMContentLoaded', function () {
 
             return false
         }
-        // if(skills.some(skill => typeof parseInt(skill.value) != "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0)){
-        //     skills.forEach(skill => {
-        //         if (skill.value == "" || typeof parseInt(skill.value) != "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0) {
-        //             skill.classList.add('border-danger')
-        //         }
-        //     })
-        //     return false
-        // }
-        // if (skills.some(skill => typeof parseInt(skill.value) !== "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0)) {
-        //     skills.forEach(skill => {
-        //         if (skill.value == "" || typeof parseInt(skill.value) !== "number" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0) {
-        //             skill.classList.add('border-danger')
-        //         }
-        //     })
-        //     return false
-        // }
-        // Number.isNaN(parseInt(macquettage.value))
-
         return true
     }
     const onSubmitForm = (e) => {
@@ -163,7 +145,6 @@ window.addEventListener('DOMContentLoaded', function () {
             student.url = url
             student.fileName = file.files[0].name
 
-
             AddTosessionStorage({ data: student, id: new Date().getTime().toString() })
             addCard({ data: student, id: new Date().getTime().toString() }, STUDENTS.length - 1)
 
@@ -177,10 +158,26 @@ window.addEventListener('DOMContentLoaded', function () {
         sessionStorage.setItem('students', JSON.stringify(STUDENTS))
         let currentCard = document.getElementById(`${id}`)
         currentCard.remove()
-        if(STUDENTS.length == 0){
+        if (STUDENTS.length == 0) {
             insertStudent.classList.add('d-none')
         }
     }
+    const updateCard = (currentStudent) => {
+        // STUDENTS.some((student)=> student.id == )
+        lastName.value = currentStudent.last_name
+        firstName.value = currentStudent.first_name
+        bio.value = currentStudent.bio
+        level.value = currentStudent.level
+        // file.files[0] = student["data"].image
+        // let container = new DataTransfer();
+        // file.items.add(currentStudent.image);
+        // document.querySelector('#file_input').files = container.files;
+        api.value = currentStudent["skills"][0]["api"]
+        design.value = currentStudent["skills"][1]["design"]
+        integration.value = currentStudent["skills"][2]["integration"]
+
+    }
+
     const addCard = (student, index) => {
         const card = `
         <div class="card p-3 my-2 waiting-student-card" id="${student.id}">
@@ -217,19 +214,10 @@ window.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById(`edit-student-${student.id}`).addEventListener('click', () => {
 
-            lastName.value = student["data"].last_name
-            firstName.value = student["data"].first_name
-            bio.value = student["data"].bio
-            level.value = student["data"].level
-            // file.files[0] = student["data"].image
-            // let container = new DataTransfer();
-            console.log(student["data"].image);
-            // file.items.add(student["data"].image);
-            // document.querySelector('#file_input').files = container.files;
-            api.value = student["data"]["skills"][0]["api"]
-            integration.value = student["data"]["skills"][2]["integration"]
-            design.value = student["data"]["skills"][1]["design"]
-
+            // updateCard(student['data'])
+            // updateCard(JSON.parse(sessionStorage.getItem('students'))[index]["data"])
+            console.log(STUDENTS);
+            updateCard(STUDENTS[index])
             submitButton.classList.add('d-none')
             btnEditForm.classList.remove('d-none')
             btnEditForm.setAttribute('data-card-to-update', student.id)
@@ -264,19 +252,24 @@ window.addEventListener('DOMContentLoaded', function () {
             student.image = file.files[0]
             student.url = url
             student.fileName = file.files[0].name
-            student.skills = [{ api: api.value, integration: integration.value, design: design.value }]
+            student.skills = [{ api: api.value }, { integration: integration.value }, { design: design.value }]
 
             ClONE_STUDENTS.forEach((clone_student, i) => {
+                console.log(clone_student.id, id);
                 if (clone_student.id === id) {
                     STUDENTS.splice(i, 1, { data: student, id: id })
+                    sessionStorage.setItem('students', JSON.stringify(STUDENTS))
+                    
                 }
             })
-            sessionStorage.setItem('students', JSON.stringify(STUDENTS))
 
+            FORM.reset()
+            // updateCard(student)
             submitButton.classList.remove('d-none')
             e.target.classList.add('d-none')
             e.target.setAttribute('data-card-to-update', "")
-            FORM.reset()
+        } else {
+            alert("error lors de la modification")
         }
     })
     insertStudent.addEventListener('click', (e) => {
