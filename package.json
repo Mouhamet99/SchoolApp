@@ -1,0 +1,33 @@
+{
+  "name": "schoolapp",
+  "version": "1.0.0",
+  "description": "A simple app using to manage students with some functionnality (add students ,edit students, delete students and see details od students' informations)",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mouhamet99/SchoolApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mouhamet99/SchoolApp/issues"
+  },
+  "homepage": "https://github.com/Mouhamet99/SchoolApp#readme",
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/plugin-transform-runtime": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "babel-loader": "^8.2.3",
+    "regenerator-runtime": "^0.13.9",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  },
+  "dependencies": {
+    "firebase": "^9.6.1"
+  }
+}

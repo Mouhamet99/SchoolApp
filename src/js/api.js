@@ -1,6 +1,4 @@
-import {
-   initializeApp, getApp
-} from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+import { initializeApp } from 'firebase/app';
 
 import {
    getFirestore,
@@ -10,13 +8,12 @@ import {
    deleteDoc,
    getDocs,
    getDoc,
-   doc,
-   query,
-   where,
    orderBy,
+   query,
+   doc,
    Timestamp
-} from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
-import { getStorage, ref, uploadBytes, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+} from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 //Config
 const firebaseConfig = {
@@ -28,20 +25,11 @@ const firebaseConfig = {
    appId: "1:25534545863:web:c8a1a2819de62374a6e3e2",
    measurementId: "G-MP998X4K24"
 };
-
+// import 'regenerator-runtime/runtime'
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-//**************Uploaded a blob or file */
-// 'file' comes from the Blob or File API
-// uploadBytes(storageRef, file).then((snapshot) => {
-// });
-//**************Uploaded a file */
-// const message = 'This is my message.';
-// uploadString(storageRef, message).then((snapshot) => {
-// });
 
 //*=================================================================
 //*=================================================================
@@ -51,25 +39,37 @@ const db = getFirestore(app);
 /********************************/
 export const getStudents = async () => {
    try {
+      // const studentsCollection = collection(db, 'students');
+      // const studentSnapshot = await getDocs(studentsCollection);
+
+      // let students = studentSnapshot.docs.map(doc => {
+      //    return {
+      //       "data": doc.data(),
+      //       "id": doc.id
+      //    }
+      // });
+
+      // return student
       const studentsCollection = collection(db, 'students');
-      const studentSnapshot = await getDocs(studentsCollection);
-
-      let students = studentSnapshot.docs.map(doc => {
-         return {
-            "data": doc.data(),
-            "id": doc.id
-         }
+      const q = await query(studentsCollection, orderBy("created_at", "asc"));
+      const querySnapshot = await getDocs(q);
+      let studentsList = []
+      querySnapshot.forEach((doc) => {
+         studentsList.push({
+            id: doc.id,
+            data: doc.data()
+         })
       });
+      return studentsList;
 
-      return students
+
+
    } catch (error) {
    }
 }
 
-
-
 /********************************/
-//Update a students in databases /
+//Update a students in databases //
 /********************************/
 const updateStudent = async function (id, studentUpdated) {
    try {
@@ -82,23 +82,6 @@ const updateStudent = async function (id, studentUpdated) {
       alert("Error Updating student👉👉\n");
    }
 }
-// "created_at": {
-//    "seconds": 1640262000,
-//    "nanoseconds": 0
-// },
-const student = {
-   "first_name": "Maman",
-   "skills": [
-      "{\"frontend\":50}",
-      "{\"backend\":80}",
-      "{\"API\":80}"
-   ],
-   "level": "debutant",
-   "bio": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque quo eum ea exercitationem ex. Eaque at eum saepe? Odit, sunt.",
-   "last_name": "DIOP",
-   "created_at": Timestamp.fromDate(new Date())
-}
-//updateStudent("RNteYV3uOo44cTUARnTK", student);
 
 /********************************/
 /*Remove a student from firestore database */
@@ -112,7 +95,6 @@ async function removeStudent(id) {
       alert("Error Deleting student🤦‍♂️🤷‍♀️🤷‍♀️");
    }
 }
-//removeStudent("vcSLdIpa92Wf2kZbRNvF")
 
 /********************************/
 /*Insert a student from firestore database */
@@ -141,7 +123,6 @@ export const addStudent = async (newStudent) => {
 
 
 }
-// addStudent(student)
 
 /********************************/
 /*Uppload file */
@@ -151,11 +132,11 @@ export const uploadFiles = async (file) => {
    //
    if (!file) return;
    const storage = getStorage();
-   // let url = window.URL.createObjectURL(file.files[0])
    const storageRef = ref(storage, `userProfiles/${file.name}`);
    let downloadURL = ""
    await uploadBytes(storageRef, file).then((snapshot) => getDownloadURL(snapshot.ref)).then(URL => {
       downloadURL = URL
    });
+
    return downloadURL
 };

@@ -1,9 +1,15 @@
-import { getStudents } from './api.js'
-
-window.onload = function () {
-   let STUDENTS = []
-   const cardContainer = document.querySelector('#students_container')
-   const addCard = (student, index) => {
+import { getStudents } from './api.js';
+window.addEventListener('DOMContentLoaded', function () {
+   const REGEX = /apprenants\.html$/;
+   if (!REGEX.test(window.location.pathname)) {
+      return
+   }
+   const logo = document.querySelector('#logo')
+   logo.addEventListener('click', () => {
+      window.location.href = "../index.html"
+   })
+   const addCard = (student) => {
+      const cardContainer = document.querySelector('#students_container')
 
       const card = `
       <div class="col">
@@ -17,7 +23,7 @@ window.onload = function () {
                             </div>
                      <div class="ms-2 c-details">
                         <h6 class="mb-0" data-last-name="${student['data'].last_name}" data-first-name="${student['data'].first_name}" >${student['data'].first_name} ${student['data'].last_name}</h6>
-                        <strong class="lead fs-6">Debutant</strong>
+                        <strong class="lead fs-6">${student['data'].level}</strong>
                      </div>
                      
                      <button id="detail" class="btn-detail ms-auto align-self-start rounded btn btn-outline-secondary btn-sm px-2 py-0" data-card-detail="${student.id}">Detail</button>
@@ -44,10 +50,9 @@ window.onload = function () {
       })
    }
    getStudents().then((students) => {
-      
-      STUDENTS = students;
+
       students.forEach((student, index) => {
-         addCard(student, index)
+         addCard(student)
          if (students.length - 1 === index) {
             document.querySelector('.center-page').classList.add('d-none')
          }
@@ -61,7 +66,7 @@ window.onload = function () {
       const level = modal.querySelector('#level')
       const bio = modal.querySelector('#bio')
       const skills = modal.querySelector('#skills')
-      const colors = ["primary", "warning", "danger", "info","success"]
+      const colors = ["primary", "warning", "danger", "info", "success"]
 
       profile.src = student['image']['url']
       username.textContent = student['first_name'] + ' ' + student['last_name']
@@ -87,5 +92,4 @@ window.onload = function () {
       })
       modalTrigger.click()
    }
-
-}
+})

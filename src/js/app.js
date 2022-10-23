@@ -1,10 +1,19 @@
+// import 'regenerator-runtime/runtime' ;
 import { addStudent } from './api.js'
-window.onload = function () {
-
+window.addEventListener('DOMContentLoaded', function () {
+    const REGEX = /apprenants\.html$/;
+    if (REGEX.test(window.location.pathname)) {
+        return
+    }
+    const logo = document.querySelector('#logo')
+    logo.addEventListener('click', () => {
+        window.location.href = "../index.html"
+    })
+    console.log('Home Page');
     let STUDENTS = sessionStorage.getItem('students') ? JSON.parse(sessionStorage.getItem('students')) : [];
     const FORM = document.getElementById('add-form')
     const submitButton = document.querySelector('button[type="submit"]')
-    const btnFormEdit = document.getElementById('save-edit')
+    const btnEditForm = document.getElementById('save-edit')
     const lastName = document.getElementById('last-name')
     const firstName = document.getElementById('first-name')
     const bio = document.getElementById('bio')
@@ -16,9 +25,7 @@ window.onload = function () {
     const insertStudent = document.querySelector('#saveStudents')
     const cardContainer = document.querySelector('#waiting-student-cards')
 
-
     const displayWaitingCards = () => {
-
         STUDENTS.forEach((student, index) => {
             addCard(student, index)
         });
@@ -26,10 +33,21 @@ window.onload = function () {
             insertStudent.classList.remove('d-none')
         }
     }
+
     const AddTosessionStorage = (student) => {
         STUDENTS.push(student);
         sessionStorage.setItem("students", JSON.stringify(STUDENTS));
     }
+    [api, integration, design].forEach(skill => {
+        skill.addEventListener('input', (e) => {
+            if (parseInt(e.target.value) > 100) {
+                e.target.value = 100
+            }
+            if (parseInt(e.target.value) < 0) {
+                e.target.value = 0
+            }
+        })
+    })
     bio.addEventListener("input", (e) => {
         const maxLength = 130;
         let progress = document.querySelector("#text-progress");
@@ -50,6 +68,26 @@ window.onload = function () {
             indicator.classList.remove("text-danger");
         }
     });
+    function loadURLToInputFiled(url) {
+        getImgURL(url, (imgBlob) => {
+            // let fileName = 'hasFilename.jpg'
+            // let file = new File([imgBlob], fileName, { type: "image/png", lastModified: new Date().getTime() }, 'utf-8');
+            let container = new DataTransfer();
+            container.items.add(file.files[0]);
+            document.querySelector('#file_input').files = container.files;
+
+        })
+    }
+    const test = () => {
+        var file = document.getElementById('file').files[0];
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var image = document.createElement("img");
+            image.src = e.target.result;
+            document.body.appendChild(image);
+        }
+        reader.readAsDataURL(file);
+    }
     const formIsValid = () => {
         let lastNameValue = lastName.value.trim()
         let firstNameValue = firstName.value.trim()
@@ -64,13 +102,11 @@ window.onload = function () {
         let error = document.querySelector('#error')
 
         file.classList.remove('border-danger')
-        skills.forEach(skill => {
-            if (skill.value == "" || typeof parseInt(skill)) {
-                skill.classList.remove('border-danger')
-            }
-        })
         inputElements.forEach(element => {
             element.classList.remove('border-danger')
+        })
+        skills.forEach(skill => {
+            skill.classList.remove('border-danger')
         })
         error.classList.add('d-none')
 
@@ -83,18 +119,14 @@ window.onload = function () {
                 }
             })
             skills.forEach(skill => {
-                if (skill.value == "" || typeof parseInt(skill) != "number") {
+                if (skill.value == "" || parseInt(skill.value) > 100 || parseInt(skill.value) < 0) {
                     skill.classList.add('border-danger')
                 }
             })
-            if (file.files.length == 0) {
-                file.classList.add('border-danger')
-            }
+            file.files[0] ?? file.classList.add('border-danger')
+
             return false
         }
-
-
-
         return true
     }
     const onSubmitForm = (e) => {
@@ -113,11 +145,8 @@ window.onload = function () {
             student.url = url
             student.fileName = file.files[0].name
 
-
-            // student.created_at = Timestamp.fromDate(new Date())
-            // student.skills =  ['{"frontend":50}', '{"backend":90}', '{"Desingn":30}']
-            AddTosessionStorage({ data: student, id: Math.random().toString() })
-            addCard({ data: student, id: Math.random().toString() }, STUDENTS.length)
+            AddTosessionStorage({ data: student, id: new Date().getTime().toString() })
+            addCard({ data: student, id: new Date().getTime().toString() }, STUDENTS.length - 1)
 
             FORM.reset()
         }
@@ -125,17 +154,37 @@ window.onload = function () {
     }
     const removeStudent = (id, index) => {
         STUDENTS.splice(index, 1)
+        console.log(index);
         sessionStorage.setItem('students', JSON.stringify(STUDENTS))
         let currentCard = document.getElementById(`${id}`)
         currentCard.remove()
+        if (STUDENTS.length == 0) {
+            insertStudent.classList.add('d-none')
+        }
     }
+    const updateCard = (currentStudent) => {
+        // STUDENTS.some((student)=> student.id == )
+        lastName.value = currentStudent.last_name
+        firstName.value = currentStudent.first_name
+        bio.value = currentStudent.bio
+        level.value = currentStudent.level
+        // file.files[0] = student["data"].image
+        // let container = new DataTransfer();
+        // file.items.add(currentStudent.image);
+        // document.querySelector('#file_input').files = container.files;
+        api.value = currentStudent["skills"][0]["api"]
+        design.value = currentStudent["skills"][1]["design"]
+        integration.value = currentStudent["skills"][2]["integration"]
+
+    }
+
     const addCard = (student, index) => {
         const card = `
         <div class="card p-3 my-2 waiting-student-card" id="${student.id}">
                     <div class="row">
                         <div class="d-flex flex-row align-items-center">
                             <div class="icon  border border-4 border-secondary rounded-circle shadow-sm d-flex">
-                                <img class="rounded-circle img-fluid sp-img-cover" src="${student['data'].url}" alt="student profile image"> 
+                                <img class="rounded-circle img-fluid sp-img-cover" id="student-profil" src="${student['data'].url}" alt="student profile image"> 
                             </div>
                             <div class="ms-2 c-details">
                                 <h6 class="mb-0" id="student-fullname" data-last-name="${student['data'].last_name}" data-first-name="${student['data'].first_name}" > ${student['data'].first_name} ${student['data'].last_name}</h6> 
@@ -156,6 +205,8 @@ window.onload = function () {
                             <span class="text-muted" id="student-bio">${student['data'].bio}</span>
                         </div>
                     </div>
+                    <div class="row" id="">
+                    </div>
                 </div>
         `;
 
@@ -163,16 +214,13 @@ window.onload = function () {
 
         document.getElementById(`edit-student-${student.id}`).addEventListener('click', () => {
 
-            lastName.value = student["data"].last_name
-            firstName.value = student["data"].first_name
-            bio.value = student["data"].bio
-            level.value = student["data"].level
-            file.files[0] = student["data"].image
-            // levelOption.selected = true
-
+            // updateCard(student['data'])
+            // updateCard(JSON.parse(sessionStorage.getItem('students'))[index]["data"])
+            console.log(STUDENTS);
+            updateCard(STUDENTS[index])
             submitButton.classList.add('d-none')
-            btnFormEdit.classList.remove('d-none')
-            btnFormEdit.setAttribute('data-card-to-update', student.id)
+            btnEditForm.classList.remove('d-none')
+            btnEditForm.setAttribute('data-card-to-update', student.id)
         })
         document.getElementById(`remove-student-${student.id}`).addEventListener('click', () => {
             removeStudent(student.id, index)
@@ -181,13 +229,13 @@ window.onload = function () {
 
     displayWaitingCards()
 
-    submitButton.addEventListener('click', onSubmitForm)
+    submitButton.addEventListener('click', (e) => onSubmitForm(e))
 
-    btnFormEdit.addEventListener('click', (e) => {
+    btnEditForm.addEventListener('click', (e) => {
         e.preventDefault()
         if (formIsValid()) {
-
             let id = e.target.dataset.cardToUpdate
+            let url = window.URL.createObjectURL(file.files[0])
             let currentCard = document.getElementById(`${id}`)
             let ClONE_STUDENTS = [...STUDENTS]
             const student = {}
@@ -195,38 +243,49 @@ window.onload = function () {
             currentCard.querySelector('#student-fullname').innerHTML = firstName.value + "  " + lastName.value
             currentCard.querySelector('#student-bio').innerHTML = bio.value
             currentCard.querySelector('#student-level').innerHTML = level.value
+            currentCard.querySelector('#student-profil').src = url
 
             student.first_name = firstName.value
             student.last_name = lastName.value
             student.bio = bio.value
             student.level = level.value
-            student.skills = [{ api: api.value, integration: integration.value, design: design.value }]
+            student.image = file.files[0]
+            student.url = url
+            student.fileName = file.files[0].name
+            student.skills = [{ api: api.value }, { integration: integration.value }, { design: design.value }]
+
             ClONE_STUDENTS.forEach((clone_student, i) => {
+                console.log(clone_student.id, id);
                 if (clone_student.id === id) {
                     STUDENTS.splice(i, 1, { data: student, id: id })
+                    sessionStorage.setItem('students', JSON.stringify(STUDENTS))
+                    
                 }
             })
-            sessionStorage.setItem('students', JSON.stringify(STUDENTS))
-
-            submitButton.classList.remove('d-none')
-            btnFormEdit.classList.add('d-none')
-            btnFormEdit.setAttribute('data-card-to-update', "")
-            // AddTosessionStorage({ data: student, id: Math.random().toString() })
 
             FORM.reset()
+            // updateCard(student)
+            submitButton.classList.remove('d-none')
+            e.target.classList.add('d-none')
+            e.target.setAttribute('data-card-to-update', "")
+        } else {
+            alert("error lors de la modification")
         }
     })
     insertStudent.addEventListener('click', (e) => {
         e.preventDefault()
+        document.querySelector('.center-page').classList.remove('d-none')
         STUDENTS.forEach((newStudent, index) => {
-            addStudent(newStudent)
-            if (STUDENTS.length - 1 == index) {
-                STUDENTS = []
-                sessionStorage.removeItem('students')
-                document.querySelectorAll('.waiting-student-card').forEach(card => card.remove())
-                e.target.classList.add('d-none')
-            }
+            addStudent(newStudent).then(() => {
+                if (STUDENTS.length - 1 == index) {
+                    STUDENTS = []
+                    sessionStorage.removeItem('students')
+                    document.querySelectorAll('.waiting-student-card').forEach(card => card.remove())
+                    e.target.classList.add('d-none')
+                    document.querySelector('.center-page').classList.add('d-none')
+                }
+            })
         })
 
     })
-};
+})
